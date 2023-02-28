@@ -33,3 +33,5 @@
 
 /src/build
 /src/*.pro.user
+build-*
+/doc

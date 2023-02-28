@@ -6,4 +6,7 @@ run: build
 	./src/build/icpacman
 
 clean:
-	rm -rf src/build
+	rm -rf src/build doc
+
+doxygen:
+	doxygen Doxyfile
