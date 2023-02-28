@@ -42,7 +42,7 @@ class Grid : public QGraphicsScene {
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
 
-    QPixmap spritePixmap(":sprite.png");
+    QPixmap spritePixmap(":assets/sprite.png");
     Grid grid(10, 10, spritePixmap);
     QGraphicsView view(&grid);
     view.show();
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     });
     timer.start(16);
 
-    // MainWindow w;
-    // w.show();
+    MainWindow w;
+    w.show();
     return a.exec();
 }
