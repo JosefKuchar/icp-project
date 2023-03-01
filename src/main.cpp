@@ -2,7 +2,9 @@
 
 #include <QApplication>
 #include <QtWidgets>
+#include <fstream>
 #include <iostream>
+#include <sstream>
 
 class Sprite : public QGraphicsPixmapItem {
    public:
@@ -53,6 +55,9 @@ int main(int argc, char* argv[]) {
         view.update();
     });
     timer.start(16);
+
+    std::ifstream t("examples/intro.txt");
+    std::stringstream buffer;
 
     MainWindow w;
     w.show();
