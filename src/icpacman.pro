@@ -10,10 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    maploader.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    maploader.hpp
 
 FORMS += \
     mainwindow.ui

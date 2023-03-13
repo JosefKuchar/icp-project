@@ -1,10 +1,13 @@
 #include "mainwindow.h"
+#include "maploader.hpp"
 
 #include <QApplication>
 #include <QtWidgets>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <regex>
+
 
 class Sprite : public QGraphicsPixmapItem {
    public:
@@ -13,13 +16,39 @@ class Sprite : public QGraphicsPixmapItem {
 
 class Grid : public QGraphicsScene {
    public:
-    Grid(int rows, int cols, const QPixmap& spritePixmap)
-        : m_rows(rows), m_cols(cols), m_spritePixmap(spritePixmap) {
-        for (int row = 0; row < rows; ++row) {
-            for (int col = 0; col < cols; ++col) {
+    Grid(MapInfo& map) {
+        QPixmap pacmanPixmap(":assets/pacman.png");
+        QPixmap ghostPixmap(":assets/ghost.png");
+        QPixmap wallPixmap(":assets/wall.png");
+        QPixmap emptyPixmap(":assets/empty.png");
+        QPixmap keyPixmap(":assets/key.png");
+        QPixmap targetPixmap(":assets/target.png");
+
+        for (int row = 0; row < map.height; ++row) {
+            for (int col = 0; col < map.width; ++col) {
+                switch (map.map[row][col]) {
+                    case Tile::Player:
+                        m_spritePixmap = pacmanPixmap;
+                        break;
+                    case Tile::Ghost:
+                        m_spritePixmap = ghostPixmap;
+                        break;
+                    case Tile::Wall:
+                        m_spritePixmap = wallPixmap;
+                        break;
+                    case Tile::Empty:
+                        m_spritePixmap = emptyPixmap;
+                        break;
+                    case Tile::Key:
+                        m_spritePixmap = keyPixmap;
+                        break;
+                    case Tile::Target:
+                        m_spritePixmap = targetPixmap;
+                        break;
+                }
                 Sprite* sprite = new Sprite(m_spritePixmap);
-                sprite->setPos(col * (m_spritePixmap.width() + 5),
-                               row * (m_spritePixmap.height() + 5));
+                sprite->setPos(col * (m_spritePixmap.width()),
+                               row * (m_spritePixmap.height()));
                 addItem(sprite);
                 m_sprites.append(sprite);
             }
@@ -29,7 +58,7 @@ class Grid : public QGraphicsScene {
     void updatePositions() {
         for (auto sprite : m_sprites) {
             QPointF pos = sprite->pos();
-            pos.setX(pos.x() + 1.0f);  // Update the x position of the sprite
+            //pos.setX(pos.x() + 1.0f);  // Update the x position of the sprite
             sprite->setPos(pos);
         }
     }
@@ -44,8 +73,9 @@ class Grid : public QGraphicsScene {
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
 
-    QPixmap spritePixmap(":assets/sprite.png");
-    Grid grid(10, 10, spritePixmap);
+    MapInfo map = MapInfo("./examples/intro.txt");
+
+    Grid grid(map);
     QGraphicsView view(&grid);
     view.show();
 
@@ -55,9 +85,6 @@ int main(int argc, char* argv[]) {
         view.update();
     });
     timer.start(16);
-
-    std::ifstream t("examples/intro.txt");
-    std::stringstream buffer;
 
     MainWindow w;
     w.show();

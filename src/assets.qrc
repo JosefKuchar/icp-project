@@ -1,5 +1,10 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file>assets/sprite.png</file>
+    <file>assets/pacman.png</file>
+    <file>assets/ghost.png</file>
+    <file>assets/wall.png</file>
+    <file>assets/empty.png</file>
+    <file>assets/key.png</file>
+    <file>assets/target.png</file>
 </qresource>
 </RCC>
