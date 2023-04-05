@@ -1,4 +1,5 @@
 #include "game_scene.hpp"
+#include "player.hpp"
 
 Grid::Grid(MapInfo& map) {
     QPixmap pacmanPixmap(":assets/pacman.png");
@@ -36,6 +37,9 @@ Grid::Grid(MapInfo& map) {
             m_sprites.append(sprite);
         }
     }
+
+    Player* player = new Player(pacmanPixmap);
+    addItem(player);
 }
 
 void Grid::updatePositions() {

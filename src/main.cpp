@@ -4,12 +4,6 @@
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
 
-    // MapInfo map = MapInfo("./examples/intro.txt");
-
-    // Grid grid(map);
-    // QGraphicsView view(&grid);
-    // view.show();
-
     // QTimer timer;
     // QObject::connect(&timer, &QTimer::timeout, [&]() {
     //     grid.updatePositions();
