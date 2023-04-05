@@ -11,11 +11,13 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    maploader.cpp
+    maploader.cpp \
+    game_scene.cpp \
 
 HEADERS += \
-    mainwindow.h \
-    maploader.hpp
+    mainwindow.hpp \
+    maploader.hpp \
+    game_scene.hpp \
 
 FORMS += \
     mainwindow.ui

@@ -54,6 +54,14 @@
     "thread": "cpp",
     "cinttypes": "cpp",
     "typeinfo": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "bitset": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "cstring": "cpp",
+    "regex": "cpp",
+    "numbers": "cpp",
+    "semaphore": "cpp",
+    "stop_token": "cpp"
   }
 }
