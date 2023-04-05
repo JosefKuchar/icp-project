@@ -3,8 +3,8 @@
 #include <QApplication>
 #include <QtWidgets>
 #include <iostream>
-#include "mainwindow.hpp"
 #include "maploader.hpp"
+#include "object.hpp"
 #include "ui_mainwindow.h"
 
 class Sprite : public QGraphicsPixmapItem {
@@ -13,13 +13,22 @@ class Sprite : public QGraphicsPixmapItem {
 };
 
 class Grid : public QGraphicsScene {
+    Q_OBJECT
+
    public:
     Grid(MapInfo& map);
+    void start();
     void updatePositions();
+    void setDirection(QPoint direction);
+
+   private slots:
+    void testSlot();
 
    private:
     int m_rows;
     int m_cols;
+    Object* m_player;
     QPixmap m_spritePixmap;
     QList<Sprite*> m_sprites;
+    QPoint m_direction;
 };

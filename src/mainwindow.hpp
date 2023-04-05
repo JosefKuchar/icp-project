@@ -3,6 +3,7 @@
 
 #include <QKeyEvent>
 #include <QMainWindow>
+#include "game_scene.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,5 +21,6 @@ class MainWindow : public QMainWindow {
 
    private:
     Ui::MainWindow* ui;
+    Grid* m_grid;
 };
 #endif  // MAINWINDOW_H

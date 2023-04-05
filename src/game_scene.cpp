@@ -1,5 +1,7 @@
 #include "game_scene.hpp"
-#include "player.hpp"
+#include <iostream>
+#include "globals.hpp"
+#include "object.hpp"
 
 Grid::Grid(MapInfo& map) {
     QPixmap pacmanPixmap(":assets/pacman.png");
@@ -38,14 +40,26 @@ Grid::Grid(MapInfo& map) {
         }
     }
 
-    Player* player = new Player(pacmanPixmap);
-    addItem(player);
+    m_player = new Object(pacmanPixmap);
+    addItem(m_player);
+    std::cout << "Initialized grid" << std::endl;
 }
 
-void Grid::updatePositions() {
-    for (auto sprite : m_sprites) {
-        QPointF pos = sprite->pos();
-        // pos.setX(pos.x() + 1.0f);  // Update the x position of the sprite
-        sprite->setPos(pos);
-    }
+void Grid::setDirection(QPoint direction) {
+    std::cout << "Direction: " << direction.x() << ", " << direction.y() << std::endl;
+    std::cout << "Setting direction" << std::endl;
+    std::cout << m_sprites.size() << std::endl;
+    m_direction = direction;
+}
+
+void Grid::start() {
+    QTimer* timer = new QTimer(this);
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(testSlot()));
+    timer->start(globals::TICK_RATE);
+}
+
+void Grid::testSlot() {
+    auto playerPos = m_player->getPosition();
+    auto newPos = playerPos + m_direction;
+    m_player->setPosition(newPos.x(), newPos.y());
 }

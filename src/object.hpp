@@ -2,12 +2,13 @@
 
 #include <QtWidgets>
 
-class Player : public QGraphicsPixmapItem {
+class Object : public QGraphicsPixmapItem {
    public:
-    Player(const QPixmap& pixmap);
+    Object(const QPixmap& pixmap);
     void setPosition(int x, int y);
+    QPoint getPosition();
     void update();
-    ~Player();
+    ~Object();
 
    private:
     QVariantAnimation* m_animation;
