@@ -1,65 +1,66 @@
 #include "game_scene.hpp"
 #include <iostream>
 #include "globals.hpp"
-#include "object.hpp"
+
+#include "coin.hpp"
+#include "ghost.hpp"
+#include "key.hpp"
+#include "pacman.hpp"
+#include "target.hpp"
+#include "wall.hpp"
 
 Grid::Grid(MapInfo& map) {
-    QPixmap pacmanPixmap(":assets/pacman.png");
-    QPixmap ghostPixmap(":assets/ghost.png");
-    QPixmap wallPixmap(":assets/wall.png");
-    QPixmap emptyPixmap(":assets/empty.png");
-    QPixmap keyPixmap(":assets/key.png");
-    QPixmap targetPixmap(":assets/target.png");
-
+    // Create all objects
     for (int row = 0; row < map.height; ++row) {
         for (int col = 0; col < map.width; ++col) {
+            QPoint position(col, row);
             switch (map.map[row][col]) {
                 case Tile::Player:
-                    m_spritePixmap = pacmanPixmap;
+                    m_player = new Pacman(position);
+                    m_objects.append(m_player);
                     break;
                 case Tile::Ghost:
-                    m_spritePixmap = ghostPixmap;
+                    m_objects.append(new Ghost(position));
                     break;
                 case Tile::Wall:
-                    m_spritePixmap = wallPixmap;
+                    m_objects.append(new Wall(position));
                     break;
                 case Tile::Empty:
-                    m_spritePixmap = emptyPixmap;
+                    m_objects.append(new Coin(position));
                     break;
                 case Tile::Key:
-                    m_spritePixmap = keyPixmap;
+                    m_objects.append(new Key(position));
                     break;
                 case Tile::Target:
-                    m_spritePixmap = targetPixmap;
+                    m_objects.append(new Target(position));
                     break;
             }
-            Sprite* sprite = new Sprite(m_spritePixmap);
-            sprite->setPos(col * (m_spritePixmap.width()), row * (m_spritePixmap.height()));
-            addItem(sprite);
-            m_sprites.append(sprite);
         }
     }
 
-    m_player = new Object(pacmanPixmap);
-    addItem(m_player);
-    std::cout << "Initialized grid" << std::endl;
+    // Add all objects to the scene
+    for (auto object : m_objects) {
+        this->addItem(object);
+    }
+}
+
+Grid::~Grid() {
+    for (auto object : m_objects) {
+        delete object;
+    }
 }
 
 void Grid::setDirection(QPoint direction) {
-    std::cout << "Direction: " << direction.x() << ", " << direction.y() << std::endl;
-    std::cout << "Setting direction" << std::endl;
-    std::cout << m_sprites.size() << std::endl;
     m_direction = direction;
 }
 
 void Grid::start() {
     QTimer* timer = new QTimer(this);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(testSlot()));
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
     timer->start(globals::TICK_RATE);
 }
 
-void Grid::testSlot() {
+void Grid::tick() {
     auto playerPos = m_player->getPosition();
-    auto newPos = playerPos + m_direction;
-    m_player->setPosition(newPos.x(), newPos.y());
+    m_player->setPosition(playerPos + m_direction);
 }

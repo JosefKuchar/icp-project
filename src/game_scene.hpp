@@ -20,15 +20,15 @@ class Grid : public QGraphicsScene {
     void start();
     void updatePositions();
     void setDirection(QPoint direction);
+    ~Grid();
 
    private slots:
-    void testSlot();
+    void tick();
 
    private:
     int m_rows;
     int m_cols;
     Object* m_player;
-    QPixmap m_spritePixmap;
-    QList<Sprite*> m_sprites;
+    QList<Object*> m_objects;
     QPoint m_direction;
 };
