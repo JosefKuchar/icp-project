@@ -1,8 +1,8 @@
-#include "object.hpp"
+#include "sprite.hpp"
 #include <iostream>
 #include "globals.hpp"
 
-Object::Object(const QPixmap& pixmap, QPoint position) : QGraphicsPixmapItem(pixmap) {
+Sprite::Sprite(const QPixmap& pixmap, QPoint position) : QGraphicsPixmapItem(pixmap) {
     // Set inital position
     m_position = position;
     m_nextPosition = position;
@@ -15,7 +15,7 @@ Object::Object(const QPixmap& pixmap, QPoint position) : QGraphicsPixmapItem(pix
                      [this](const QVariant& value) { this->setPos(value.toPointF()); });
 }
 
-void Object::setPosition(QPoint position) {
+void Sprite::setPosition(QPoint position) {
     // Next is now current position
     m_position = m_nextPosition;
     // Set next position
@@ -29,10 +29,10 @@ void Object::setPosition(QPoint position) {
     m_animation->start();
 }
 
-QPoint Object::getPosition() {
+QPoint Sprite::getPosition() {
     return m_nextPosition;
 }
 
-Object::~Object() {
+Sprite::~Sprite() {
     delete m_animation;
 }

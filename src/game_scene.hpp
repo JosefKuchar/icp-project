@@ -4,13 +4,8 @@
 #include <QtWidgets>
 #include <iostream>
 #include "maploader.hpp"
-#include "object.hpp"
+#include "sprite.hpp"
 #include "ui_mainwindow.h"
-
-class Sprite : public QGraphicsPixmapItem {
-   public:
-    Sprite(const QPixmap& pixmap) : QGraphicsPixmapItem(pixmap) {}
-};
 
 class Grid : public QGraphicsScene {
     Q_OBJECT
@@ -28,7 +23,7 @@ class Grid : public QGraphicsScene {
    private:
     int m_rows;
     int m_cols;
-    Object* m_player;
-    QList<Object*> m_objects;
+    Sprite* m_player;
+    QList<Sprite*> m_objects;
     QPoint m_direction;
 };

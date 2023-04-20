@@ -11,7 +11,7 @@ void Player::tick() {
         return;
     } else if (this->m_movementMode == MovementMode::Keys) {
         if (!this->m_map->isInWall(this->position + this->m_direction)) {
-            this->position = this->position + this->m_direction;
+            this->position += this->m_direction;
         }
     } else {
         // TODO

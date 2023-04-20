@@ -24,6 +24,8 @@ Point Point::operator+(Direction direction) {
             return Point(this->x - 1, this->y);
         case Direction::Right:
             return Point(this->x + 1, this->y);
+        default:
+            return Point(this->x, this->y);
     }
 };
 
@@ -45,6 +47,7 @@ Point Point::operator+=(Direction direction) {
     return *this;
 };
 
-bool Point::operator==(Point point) {
+bool Point::operator==(const Point& point) const {
     return this->x == point.x && this->y == point.y;
 };
+

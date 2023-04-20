@@ -2,7 +2,7 @@
 
 #include "object.hpp"
 #include "map.hpp"
-#include "point.hpp
+#include "point.hpp"
 
 class Ghost : public Object {
     public:

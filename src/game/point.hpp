@@ -2,6 +2,9 @@
 
 #include "direction.hpp"
 
+#include <cstddef>
+#include <functional>
+
 class Point {
    public:
     int x;
@@ -12,5 +15,11 @@ class Point {
     Point operator+ (Point);
     Point operator+ (Direction);
     Point operator+= (Direction);
-    bool operator== (Point);
+    bool operator== (const Point&) const;
+};
+
+template<> struct std::hash<Point> {
+    std::size_t operator()(const Point& point) const {
+        return std::hash<int>()(point.x) ^ std::hash<int>()(point.y);
+    }
 };

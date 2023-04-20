@@ -1,7 +1,9 @@
 #include "game.hpp"
 
+#include <algorithm>
+
 void Game::tick() {
-    if (this->m_gameState != GameState::Running) {
+    if (this->m_gameState != GameState::Playing) {
         return;
     }
     // Update player
@@ -24,11 +26,12 @@ void Game::tick() {
     }
 
     // Check if all keys are collected
-    if (std::all_of(this->keys.begin(), this->keys.end(), [](auto& key) { return key.second; })
-        && this->m_player.position == this->m_finish) {
+    if (std::all_of(this->keys.begin(), this->keys.end(), [](auto& key) {
+        return key.second;
+    }) && this->m_player.position == this->m_finish) {
         this->m_gameState = GameState::Won;
-        return;
     }
+
 }
 
 void Game::setDirection(Direction direction) {

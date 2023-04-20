@@ -2,12 +2,11 @@
 #include <iostream>
 #include "globals.hpp"
 
-#include "coin.hpp"
-#include "ghost.hpp"
-#include "key.hpp"
-#include "pacman.hpp"
-#include "target.hpp"
-#include "wall.hpp"
+#include "ghost_sprite.hpp"
+#include "key_sprite.hpp"
+#include "pacman_sprite.hpp"
+#include "target_sprite.hpp"
+#include "wall_sprite.hpp"
 
 Grid::Grid(MapInfo& map) {
     // Create all objects
@@ -16,23 +15,22 @@ Grid::Grid(MapInfo& map) {
             QPoint position(col, row);
             switch (map.map[row][col]) {
                 case Tile::Player:
-                    m_player = new Pacman(position);
+                    m_player = new PacmanSprite(position);
                     m_objects.append(m_player);
                     break;
                 case Tile::Ghost:
-                    m_objects.append(new Ghost(position));
+                    m_objects.append(new GhostSprite(position));
                     break;
                 case Tile::Wall:
-                    m_objects.append(new Wall(position));
+                    m_objects.append(new WallSprite(position));
                     break;
                 case Tile::Empty:
-                    m_objects.append(new Coin(position));
                     break;
                 case Tile::Key:
-                    m_objects.append(new Key(position));
+                    m_objects.append(new KeySprite(position));
                     break;
                 case Tile::Target:
-                    m_objects.append(new Target(position));
+                    m_objects.append(new TargetSprite(position));
                     break;
             }
         }
