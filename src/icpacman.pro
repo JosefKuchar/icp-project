@@ -4,9 +4,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17 debug
 
-SOURCES += *.cpp
+SOURCES += $$files(*.cpp, true)
 
-HEADERS += *.hpp
+HEADERS += $$files(*.hpp, true)
 
 FORMS += \
     mainwindow.ui

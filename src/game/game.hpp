@@ -2,9 +2,25 @@
 
 #include "direction.hpp"
 #include "point.hpp"
+#include <vector>
+#include <unordered_map>
+#include "player.hpp"
+#include "ghost.hpp"
+
+enum class GameState {
+    Playing,
+    Won,
+    Lost,
+};
 
 class Game {
-    Point m_targetPosition;
+    
+    Player m_player;
+    Point m_finish;
+    std::vector<Ghost> m_ghosts;
+    std::unordered_map<Point, bool> keys;
+    std::vector<std::vector<bool>> m_map;
+    GameState m_gameState;
 
    public:
     Game();
@@ -23,8 +39,7 @@ class Game {
 
     /**
      * @brief Set target position of the player
-     * @param x X position
-     * @param y Y position
+     * @param Position Target position
      */
     void setTargetPosition(Point position);
 };

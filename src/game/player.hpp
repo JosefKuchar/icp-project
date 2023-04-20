@@ -1,0 +1,32 @@
+#pragma once
+#include "point.hpp"
+#include "map.hpp"
+#include "object.hpp"
+
+enum class MovementMode {
+  None,
+  Keys,
+  Mouse,
+};
+
+class Player : public Object {
+  Point m_targetPosition;
+  Direction m_direction;
+  MovementMode m_movementMode;
+
+public:
+  Player(Map *map, Point position);
+  void tick();
+
+  /**
+   * @brief Set the direction of the player
+   * @param direction Player direction
+   */
+  void setDirection(Direction direction);
+
+  /**
+   * @brief Set target position of the player
+   * @param Position Target position
+   */
+  void setTargetPosition(Point position);
+};
