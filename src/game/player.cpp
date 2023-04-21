@@ -1,6 +1,12 @@
 #include "player.hpp"
 
-Player::Player(Map *map, Point position) : Object(map, position) {
+Player::Player() {
+    this->m_movementMode = MovementMode::None;
+    this->m_direction = Direction::Up;
+    this->m_targetPosition = Point(0, 0);
+}
+
+Player::Player(Map* map, Point position) : Object(map, position) {
     this->m_movementMode = MovementMode::None;
     this->m_direction = Direction::Up;
     this->m_targetPosition = Point(0, 0);
@@ -20,11 +26,11 @@ void Player::tick() {
 }
 
 void Player::setDirection(Direction direction) {
-  this->m_direction = direction;
-  this->m_movementMode = MovementMode::Keys;
+    this->m_direction = direction;
+    this->m_movementMode = MovementMode::Keys;
 }
 
 void Player::setTargetPosition(Point position) {
-  this->m_targetPosition = position;
-  this->m_movementMode = MovementMode::Mouse;
+    this->m_targetPosition = position;
+    this->m_movementMode = MovementMode::Mouse;
 }

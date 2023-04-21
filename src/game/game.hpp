@@ -1,11 +1,13 @@
 #pragma once
 
-#include "direction.hpp"
-#include "point.hpp"
-#include <vector>
 #include <unordered_map>
-#include "player.hpp"
+#include <vector>
+#include "../maploader.hpp"
+#include "direction.hpp"
 #include "ghost.hpp"
+#include "map.hpp"
+#include "player.hpp"
+#include "point.hpp"
 
 enum class GameState {
     Playing,
@@ -13,17 +15,21 @@ enum class GameState {
     Lost,
 };
 
+struct GameInfo {
+    Point playerPosition;
+    std::vector<Point> ghostPositions;
+};
+
 class Game {
-    
     Player m_player;
     Point m_finish;
     std::vector<Ghost> m_ghosts;
     std::unordered_map<Point, bool> keys;
-    std::vector<std::vector<bool>> m_map;
+    Map m_map;
     GameState m_gameState;
 
    public:
-    Game();
+    Game(MapInfo map);
     ~Game();
 
     /**
@@ -42,4 +48,16 @@ class Game {
      * @param Position Target position
      */
     void setTargetPosition(Point position);
+
+    /**
+     * @brief Get the current game state
+     */
+    GameInfo getGameInfo() {
+        GameInfo info;
+        info.playerPosition = this->m_player.position;
+        for (auto& ghost : this->m_ghosts) {
+            info.ghostPositions.push_back(ghost.position);
+        }
+        return info;
+    }
 };

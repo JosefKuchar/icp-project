@@ -1,5 +1,6 @@
 #include "mainwindow.hpp"
 #include <iostream>
+#include "game/direction.hpp"
 #include "game_scene.hpp"
 #include "globals.hpp"
 #include "maploader.hpp"
@@ -11,47 +12,29 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->setFocusPolicy(Qt::StrongFocus);
 
     MapInfo map = MapInfo("./examples/intro.txt");
-    m_grid = new Grid(map);
-    ui->graphicsView->setScene(m_grid);
+    m_gameScene = new GameScene(map);
+    ui->graphicsView->setScene(m_gameScene);
     ui->graphicsView->show();
-    m_grid->start();
+    m_gameScene->start();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
     switch (event->key()) {
-        // Arrows
         case Qt::Key_Up:
-            std::cout << "Up" << std::endl;
-            m_grid->setDirection(QPoint(0, -1));
+        case Qt::Key_W:
+            this->m_gameScene->game->setDirection(Direction::Up);
             break;
         case Qt::Key_Down:
-            std::cout << "Down" << std::endl;
-            m_grid->setDirection(QPoint(0, 1));
+        case Qt::Key_S:
+            this->m_gameScene->game->setDirection(Direction::Down);
             break;
         case Qt::Key_Left:
-            std::cout << "Left" << std::endl;
-            m_grid->setDirection(QPoint(-1, 0));
+        case Qt::Key_A:
+            this->m_gameScene->game->setDirection(Direction::Left);
             break;
         case Qt::Key_Right:
-            std::cout << "Right" << std::endl;
-            m_grid->setDirection(QPoint(1, 0));
-            break;
-        // WASD
-        case Qt::Key_W:
-            std::cout << "Up" << std::endl;
-            m_grid->setDirection(QPoint(0, -1));
-            break;
-        case Qt::Key_A:
-            std::cout << "Left" << std::endl;
-            m_grid->setDirection(QPoint(-1, 0));
-            break;
-        case Qt::Key_S:
-            std::cout << "Down" << std::endl;
-            m_grid->setDirection(QPoint(0, 1));
-            break;
         case Qt::Key_D:
-            std::cout << "Right" << std::endl;
-            m_grid->setDirection(QPoint(1, 0));
+            this->m_gameScene->game->setDirection(Direction::Right);
             break;
     }
 }

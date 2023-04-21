@@ -3,19 +3,22 @@
 #include <QApplication>
 #include <QtWidgets>
 #include <iostream>
+#include "game/game.hpp"
 #include "maploader.hpp"
 #include "sprite.hpp"
 #include "ui_mainwindow.h"
 
-class Grid : public QGraphicsScene {
+class GameScene : public QGraphicsScene {
     Q_OBJECT
 
    public:
-    Grid(MapInfo& map);
+    GameScene(MapInfo& map);
     void start();
     void updatePositions();
     void setDirection(QPoint direction);
-    ~Grid();
+    ~GameScene();
+
+    Game* game;
 
    private slots:
     void tick();
@@ -24,6 +27,6 @@ class Grid : public QGraphicsScene {
     int m_rows;
     int m_cols;
     Sprite* m_player;
+    QList<Sprite*> m_ghosts;
     QList<Sprite*> m_objects;
-    QPoint m_direction;
 };

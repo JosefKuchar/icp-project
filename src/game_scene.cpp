@@ -8,7 +8,7 @@
 #include "target_sprite.hpp"
 #include "wall_sprite.hpp"
 
-Grid::Grid(MapInfo& map) {
+GameScene::GameScene(MapInfo& map) {
     // Create all objects
     for (int row = 0; row < map.height; ++row) {
         for (int col = 0; col < map.width; ++col) {
@@ -18,9 +18,12 @@ Grid::Grid(MapInfo& map) {
                     m_player = new PacmanSprite(position);
                     m_objects.append(m_player);
                     break;
-                case Tile::Ghost:
-                    m_objects.append(new GhostSprite(position));
+                case Tile::Ghost: {
+                    auto ghost = new GhostSprite(position);
+                    m_objects.append(ghost);
+                    m_ghosts.append(ghost);
                     break;
+                }
                 case Tile::Wall:
                     m_objects.append(new WallSprite(position));
                     break;
@@ -40,25 +43,27 @@ Grid::Grid(MapInfo& map) {
     for (auto object : m_objects) {
         this->addItem(object);
     }
+
+    game = new Game(map);
 }
 
-Grid::~Grid() {
+GameScene::~GameScene() {
     for (auto object : m_objects) {
         delete object;
     }
 }
 
-void Grid::setDirection(QPoint direction) {
-    m_direction = direction;
-}
-
-void Grid::start() {
+void GameScene::start() {
     QTimer* timer = new QTimer(this);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
     timer->start(globals::TICK_RATE);
 }
 
-void Grid::tick() {
-    auto playerPos = m_player->getPosition();
-    m_player->setPosition(playerPos + m_direction);
+void GameScene::tick() {
+    this->game->tick();
+    GameInfo info = this->game->getGameInfo();
+    m_player->setPosition(QPoint(info.playerPosition.x, info.playerPosition.y));
+    for (int i = 0; i < m_ghosts.size(); ++i) {
+        m_ghosts[i]->setPosition(QPoint(info.ghostPositions[i].x, info.ghostPositions[i].y));
+    }
 }

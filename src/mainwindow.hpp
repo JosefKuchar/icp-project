@@ -21,6 +21,6 @@ class MainWindow : public QMainWindow {
 
    private:
     Ui::MainWindow* ui;
-    Grid* m_grid;
+    GameScene* m_gameScene;
 };
 #endif  // MAINWINDOW_H

@@ -1,10 +1,18 @@
 #include "map.hpp"
 
-Map::Map() {};
+Map::Map(){};
 
-Map::Map(int width, int height) {
-    this->m_width = width;
-    this->m_height = height;
+Map::Map(MapInfo map) {
+    this->m_width = map.width;
+    this->m_height = map.height;
+    this->m_map = std::vector<std::vector<bool>>(map.height, std::vector<bool>(map.width, false));
+    for (int y = 0; y < map.height; y++) {
+        for (int x = 0; x < map.width; x++) {
+            if (map.map[y][x] == Tile::Wall) {
+                this->m_map[y][x] = true;
+            }
+        }
+    }
 };
 
 bool Map::isInWall(Point position) {
@@ -17,3 +25,5 @@ bool Map::isInWall(Point position) {
         return this->m_map[position.y][position.x];
     }
 };
+
+Map::~Map(){};

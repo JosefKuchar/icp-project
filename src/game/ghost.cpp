@@ -1,8 +1,8 @@
 #include "ghost.hpp"
-#include "direction.hpp"
 #include <random>
+#include "direction.hpp"
 
-Ghost::Ghost(Map *map, Point position) : Object(map, position) {}
+Ghost::Ghost(Map* map, Point position) : Object(map, position) {}
 
 void Ghost::tick() {
     // Move in a random direction
@@ -11,3 +11,5 @@ void Ghost::tick() {
         this->position += direction;
     }
 }
+
+Ghost::~Ghost() {}

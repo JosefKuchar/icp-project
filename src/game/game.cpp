@@ -2,6 +2,29 @@
 
 #include <algorithm>
 
+Game::Game(MapInfo map) {
+    this->m_gameState = GameState::Playing;
+    this->m_map = Map(map);
+    for (int y = 0; y < map.height; y++) {
+        for (int x = 0; x < map.width; x++) {
+            switch (map.map[y][x]) {
+                case Tile::Player:
+                    this->m_player = Player(&this->m_map, Point(x, y));
+                    break;
+                case Tile::Ghost:
+                    this->m_ghosts.push_back(Ghost(&this->m_map, Point(x, y)));
+                    break;
+                case Tile::Key:
+                    this->keys[Point(x, y)] = false;
+                    break;
+                case Tile::Target:
+                    this->m_finish = Point(x, y);
+                    break;
+            }
+        }
+    }
+}
+
 void Game::tick() {
     if (this->m_gameState != GameState::Playing) {
         return;
@@ -26,12 +49,10 @@ void Game::tick() {
     }
 
     // Check if all keys are collected
-    if (std::all_of(this->keys.begin(), this->keys.end(), [](auto& key) {
-        return key.second;
-    }) && this->m_player.position == this->m_finish) {
+    if (std::all_of(this->keys.begin(), this->keys.end(), [](auto& key) { return key.second; }) &&
+        this->m_player.position == this->m_finish) {
         this->m_gameState = GameState::Won;
     }
-
 }
 
 void Game::setDirection(Direction direction) {
