@@ -2,7 +2,8 @@
 #include <iostream>
 #include "globals.hpp"
 
-Sprite::Sprite(const QPixmap& pixmap, QPoint position) : QGraphicsPixmapItem(pixmap) {
+Sprite::Sprite(const QPixmap& pixmap, QPoint position, Game* game) : QGraphicsPixmapItem(pixmap) {
+    m_game = game;
     // Set inital position
     m_position = position;
     m_nextPosition = position;
@@ -27,6 +28,10 @@ void Sprite::setPosition(QPoint position) {
         QPointF(pixmap.width() * m_nextPosition.x(), pixmap.height() * m_nextPosition.y()));
     // Start animation
     m_animation->start();
+}
+
+void Sprite::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    this->m_game->setTargetPosition(Point(this->m_nextPosition.x(), this->m_nextPosition.y()));
 }
 
 QPoint Sprite::getPosition() {

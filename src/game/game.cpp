@@ -1,6 +1,7 @@
 #include "game.hpp"
 
 #include <algorithm>
+#include <iostream>
 
 Game::Game(MapInfo map) {
     this->m_gameState = GameState::Playing;
@@ -38,6 +39,7 @@ void Game::tick() {
     // Check for collisions with ghosts
     for (auto& ghost : this->m_ghosts) {
         if (this->m_player.position == ghost.position) {
+            std::cout << "Lost!" << std::endl;
             this->m_gameState = GameState::Lost;
             return;
         }
@@ -51,6 +53,7 @@ void Game::tick() {
     // Check if all keys are collected
     if (std::all_of(this->keys.begin(), this->keys.end(), [](auto& key) { return key.second; }) &&
         this->m_player.position == this->m_finish) {
+        std::cout << "Won!" << std::endl;
         this->m_gameState = GameState::Won;
     }
 }

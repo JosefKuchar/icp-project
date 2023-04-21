@@ -4,5 +4,5 @@
 
 class PacmanSprite : public Sprite {
    public:
-    PacmanSprite(QPoint position);
+    PacmanSprite(QPoint position, Game *game);
 };

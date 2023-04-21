@@ -4,5 +4,5 @@
 
 class KeySprite : public Sprite {
    public:
-    KeySprite(QPoint position);
+    KeySprite(QPoint position, Game* game);
 };

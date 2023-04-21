@@ -4,5 +4,5 @@
 
 class TargetSprite : public Sprite {
    public:
-    TargetSprite(QPoint position);
+    TargetSprite(QPoint position, Game* game);
 };

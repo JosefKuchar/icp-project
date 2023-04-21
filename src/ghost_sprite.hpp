@@ -4,5 +4,5 @@
 
 class GhostSprite : public Sprite {
    public:
-    GhostSprite(QPoint position);
+    GhostSprite(QPoint position, Game* game);
 };
