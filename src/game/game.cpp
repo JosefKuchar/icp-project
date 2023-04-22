@@ -36,7 +36,8 @@ void Game::tick() {
     for (auto& ghost : this->m_ghosts) {
         ghost.tick();
     }
-    // Check for collisions with ghosts
+    // Check for collision with ghost
+    // TODO: There is a bug where player and ghost can go through each other
     for (auto& ghost : this->m_ghosts) {
         if (this->m_player.position == ghost.position) {
             std::cout << "Lost!" << std::endl;
@@ -44,7 +45,6 @@ void Game::tick() {
             return;
         }
     }
-
     // Check for collisions with keys
     if (this->keys.count(this->m_player.position)) {
         this->keys[this->m_player.position] = true;

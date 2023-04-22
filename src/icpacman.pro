@@ -8,6 +8,8 @@ SOURCES += $$files(*.cpp, true)
 
 HEADERS += $$files(*.hpp, true)
 
+EXCLUDE += build
+
 FORMS += \
     mainwindow.ui
 

@@ -28,5 +28,6 @@ class GameScene : public QGraphicsScene {
     int m_cols;
     Sprite* m_player;
     QList<Sprite*> m_ghosts;
+    QList<Sprite*> m_keys;
     QList<Sprite*> m_objects;
 };

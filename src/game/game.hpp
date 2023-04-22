@@ -18,6 +18,7 @@ enum class GameState {
 struct GameInfo {
     Point playerPosition;
     std::vector<Point> ghostPositions;
+    std::vector<Point> keyPositions;
 };
 
 class Game {
@@ -57,6 +58,11 @@ class Game {
         info.playerPosition = this->m_player.position;
         for (auto& ghost : this->m_ghosts) {
             info.ghostPositions.push_back(ghost.position);
+        }
+        for (auto& key : this->keys) {
+            if (!key.second) {
+                info.keyPositions.push_back(key.first);
+            }
         }
         return info;
     }

@@ -2,11 +2,11 @@
 #include <iostream>
 #include "globals.hpp"
 
+#include "empty_sprite.hpp"
 #include "ghost_sprite.hpp"
 #include "key_sprite.hpp"
 #include "pacman_sprite.hpp"
 #include "target_sprite.hpp"
-#include "empty_sprite.hpp"
 
 GameScene::GameScene(MapInfo& map) {
     this->game = new Game(map);
@@ -32,9 +32,12 @@ GameScene::GameScene(MapInfo& map) {
                     break;
                 case Tile::Empty:
                     break;
-                case Tile::Key:
-                    m_objects.append(new KeySprite(position, this->game));
+                case Tile::Key: {
+                    auto key = new KeySprite(position, this->game);
+                    m_objects.append(key);
+                    m_keys.append(key);
                     break;
+                }
                 case Tile::Target:
                     m_objects.append(new TargetSprite(position, this->game));
                     break;
@@ -66,5 +69,15 @@ void GameScene::tick() {
     m_player->setPosition(QPoint(info.playerPosition.x, info.playerPosition.y));
     for (int i = 0; i < m_ghosts.size(); ++i) {
         m_ghosts[i]->setPosition(QPoint(info.ghostPositions[i].x, info.ghostPositions[i].y));
+    }
+    for (auto& key : m_keys) {
+        bool found = false;
+        for (auto& keyInfo : info.keyPositions) {
+            if (key->getPosition() == QPoint(keyInfo.x, keyInfo.y)) {
+                found = true;
+                break;
+            }
+        }
+        key->setVisible(found);
     }
 }
