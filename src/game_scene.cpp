@@ -6,6 +6,7 @@
 #include "key_sprite.hpp"
 #include "pacman_sprite.hpp"
 #include "target_sprite.hpp"
+#include "empty_sprite.hpp"
 
 GameScene::GameScene(MapInfo& map) {
     this->game = new Game(map);
@@ -14,6 +15,7 @@ GameScene::GameScene(MapInfo& map) {
     for (int row = 0; row < map.height; ++row) {
         for (int col = 0; col < map.width; ++col) {
             QPoint position(col, row);
+            m_objects.append(new EmptySprite(position, this->game));
             switch (map.map[row][col]) {
                 case Tile::Player:
                     m_player = new PacmanSprite(position, this->game);

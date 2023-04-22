@@ -16,6 +16,7 @@ class Point {
     Point operator+ (Direction);
     Point operator+= (Direction);
     bool operator== (const Point&) const;
+    bool operator< (const Point&) const;
 };
 
 template<> struct std::hash<Point> {

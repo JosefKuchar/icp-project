@@ -6,5 +6,6 @@
     <file>assets/empty.png</file>
     <file>assets/key.png</file>
     <file>assets/target.png</file>
+    <file>assets/grass.png</file>
 </qresource>
 </RCC>

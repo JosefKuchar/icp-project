@@ -2,6 +2,7 @@
 #include "map.hpp"
 #include "object.hpp"
 #include "point.hpp"
+#include <vector>
 
 enum class MovementMode {
     None,
@@ -13,11 +14,12 @@ class Player : public Object {
     Point m_targetPosition;
     Direction m_direction;
     MovementMode m_movementMode;
-
+    
    public:
     Player();
     Player(Map* map, Point position);
     void tick();
+    std::vector<Point> calculateDirection();
 
     /**
      * @brief Set the direction of the player
