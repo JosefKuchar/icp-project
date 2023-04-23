@@ -1,5 +1,6 @@
 #include "game_scene.hpp"
 #include <iostream>
+#include <fstream>
 #include "globals.hpp"
 
 #include "empty_sprite.hpp"
@@ -8,8 +9,15 @@
 #include "pacman_sprite.hpp"
 #include "target_sprite.hpp"
 
+
 GameScene::GameScene(MapInfo& map) {
     this->game = new Game(map);
+    //this->serializer = Serializer(map);
+    {
+        std::ifstream infile("haha.icpacman");
+        boost::archive::text_iarchive archive2(infile);
+        archive2 >> this->serializer;
+    }
 
     // Create all objects
     for (int row = 0; row < map.height; ++row) {
@@ -64,8 +72,25 @@ void GameScene::start() {
 }
 
 void GameScene::tick() {
-    this->game->tick();
-    GameInfo info = this->game->getGameInfo();
+    //this->game->tick();
+    //GameInfo info = this->game->getGameInfo();
+    //this->serializer.addStep(info);
+    
+    GameInfo info = this->serializer.getStep();
+    if (info.state != GameState::Playing) {
+        exit(0);
+    }
+
+    // if (info.state != GameState::Playing) {
+    //     // Serialize shit
+    //     {
+    //         std::ofstream outfile("haha.icpacman");
+    //         boost::archive::text_oarchive archive(outfile);
+    //         archive << this->serializer;
+    //         std::cout << "HEHE" << std::endl;
+    //     }
+    //}
+
     m_player->setPosition(QPoint(info.playerPosition.x, info.playerPosition.y));
     for (int i = 0; i < m_ghosts.size(); ++i) {
         m_ghosts[i]->setPosition(QPoint(info.ghostPositions[i].x, info.ghostPositions[i].y));

@@ -24,6 +24,11 @@ constexpr auto to_tile(char c) {
     }
 }
 
+MapInfo::MapInfo() {
+    width = 0;
+    height = 0;
+}
+
 MapInfo::MapInfo(std::string path) {
     std::fstream newfile;
     newfile.open(path, std::ios::in);

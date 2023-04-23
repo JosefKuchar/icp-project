@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 
+#include "boost_libs/boost/archive/text_iarchive.hpp"
+#include "boost_libs/boost/archive/text_oarchive.hpp"
+
 class InvalidMapException : public std::exception {
 public:
   char *what() { return (char *)"Invalid map file"; }
@@ -26,10 +29,28 @@ enum class Tile {
     Empty, Wall, Player, Ghost, Key, Target
 };
 
+namespace boost {
+    namespace serialization {
+        template <class Archive>
+        void serialize(Archive& ar, Tile& t, const unsigned int version) {
+            ar& t;
+        }
+    }  // namespace serialization
+}  // namespace boost
+
 class MapInfo {
-   public:
-    std::vector<std::vector<Tile>> map;
-    int width, height;
-    MapInfo(std::string path);
+    private:
+        friend class boost::serialization::access;
+
+        template<class Archive>
+        void serialize(Archive &a, const unsigned version) {
+            a & map & width & height;
+        };
+
+    public:
+        std::vector<std::vector<Tile>> map;
+        int width, height;
+        MapInfo();
+        MapInfo(std::string path);
 };
 

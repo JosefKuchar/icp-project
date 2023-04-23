@@ -5,8 +5,10 @@
 #include <iostream>
 #include "game/game.hpp"
 #include "maploader.hpp"
+#include "serializer.hpp"
 #include "sprite.hpp"
 #include "ui_mainwindow.h"
+
 
 class GameScene : public QGraphicsScene {
     Q_OBJECT
@@ -19,6 +21,7 @@ class GameScene : public QGraphicsScene {
     ~GameScene();
 
     Game* game;
+    Serializer serializer;
 
    private slots:
     void tick();

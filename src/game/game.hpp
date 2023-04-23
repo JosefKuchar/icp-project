@@ -8,6 +8,7 @@
 #include "map.hpp"
 #include "player.hpp"
 #include "point.hpp"
+#include "boost_libs/boost/serialization/vector.hpp"
 
 enum class GameState {
     Playing,
@@ -15,10 +16,28 @@ enum class GameState {
     Lost,
 };
 
+namespace boost {
+    namespace serialization {
+        template <class Archive>
+        void serialize(Archive& ar, GameState& s, const unsigned int version) {
+            ar& s;
+        }
+    }  // namespace serialization
+}  // namespace boost
+
 struct GameInfo {
     Point playerPosition;
     std::vector<Point> ghostPositions;
     std::vector<Point> keyPositions;
+    GameState state;
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int version) {
+        ar& playerPosition;
+        ar& ghostPositions;
+        ar& keyPositions;
+        ar& state;
+    };
 };
 
 class Game {
@@ -64,6 +83,7 @@ class Game {
                 info.keyPositions.push_back(key.first);
             }
         }
+        info.state = this->m_gameState;
         return info;
     }
 };
