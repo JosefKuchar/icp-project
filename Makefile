@@ -18,4 +18,4 @@ doxygen:
 
 pack: clean
 	mkdir -p doc
-	zip -r xkucha28-xsirov00.zip Makefile Doxyfile README.* src examples doc
+	zip -rX9 xkucha28-xsirov00.zip Makefile Doxyfile README.* src examples doc
