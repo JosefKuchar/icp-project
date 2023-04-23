@@ -3,27 +3,18 @@
 #include <unordered_map>
 #include <vector>
 #include "../maploader.hpp"
+#include "boost_libs/boost/serialization/vector.hpp"
 #include "direction.hpp"
 #include "ghost.hpp"
 #include "map.hpp"
 #include "player.hpp"
 #include "point.hpp"
-#include "boost_libs/boost/serialization/vector.hpp"
 
 enum class GameState {
     Playing,
     Won,
     Lost,
 };
-
-namespace boost {
-    namespace serialization {
-        template <class Archive>
-        void serialize(Archive& ar, GameState& s, const unsigned int version) {
-            ar& s;
-        }
-    }  // namespace serialization
-}  // namespace boost
 
 struct GameInfo {
     Point playerPosition;
