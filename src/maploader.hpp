@@ -6,7 +6,7 @@
 
 class InvalidMapException : public std::exception {
 public:
-  char *what() { return "Invalid map file"; }
+  char *what() { return (char *)"Invalid map file"; }
 };
 
 class InvalidFileException : public std::exception {

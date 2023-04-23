@@ -21,6 +21,8 @@ Game::Game(MapInfo map) {
                 case Tile::Target:
                     this->m_finish = Point(x, y);
                     break;
+                default:
+                    break;
             }
         }
     }

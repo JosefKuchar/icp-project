@@ -31,6 +31,7 @@ void Sprite::setPosition(QPoint position) {
 }
 
 void Sprite::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    (void) event;
     this->m_game->setTargetPosition(Point(this->m_nextPosition.x(), this->m_nextPosition.y()));
 }
 

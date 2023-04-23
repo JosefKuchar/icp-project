@@ -34,6 +34,7 @@ MapInfo::MapInfo(std::string path) {
     
     std::smatch matches;
     std::string line;
+
     int i;
 
     for (i = 0; getline(newfile, line); i++) {
@@ -47,7 +48,7 @@ MapInfo::MapInfo(std::string path) {
         }
       }
 
-      if (line.size() != width) {
+      if (line.size() != (long unsigned int)width) {
         throw InvalidMapException();
       }
 
