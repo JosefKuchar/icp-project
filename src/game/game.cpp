@@ -3,6 +3,11 @@
 #include <algorithm>
 #include <iostream>
 
+#include <fstream>
+
+#include "boost_libs/boost/archive/text_iarchive.hpp"
+#include "boost_libs/boost/archive/text_oarchive.hpp"
+
 Game::Game(MapInfo map) {
     this->m_gameState = GameState::Playing;
     this->m_map = Map(map);

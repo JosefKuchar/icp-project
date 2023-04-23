@@ -2,7 +2,7 @@
 
 build:
 	mkdir -p build
-	cd build && qmake ../src && make -j 8
+	cd build && qmake ../src && make -j 16
 	cp build/icpacman .
 
 all: build doxygen
