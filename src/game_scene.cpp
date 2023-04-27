@@ -1,6 +1,6 @@
 #include "game_scene.hpp"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include "globals.hpp"
 
 #include "empty_sprite.hpp"
@@ -9,15 +9,14 @@
 #include "pacman_sprite.hpp"
 #include "target_sprite.hpp"
 
-
 GameScene::GameScene(MapInfo& map) {
     this->game = new Game(map);
-    //this->serializer = Serializer(map);
-    {
-        std::ifstream infile("haha.icpacman");
-        boost::archive::text_iarchive archive2(infile);
-        archive2 >> this->serializer;
-    }
+    this->serializer = Serializer(map);
+    // {
+    //     std::ifstream infile("haha.icpacman");
+    //     boost::archive::text_iarchive archive2(infile);
+    //     archive2 >> this->serializer;
+    // }
 
     // Create all objects
     for (int row = 0; row < map.height; ++row) {
@@ -52,6 +51,17 @@ GameScene::GameScene(MapInfo& map) {
             }
         }
     }
+    // Draw walls around the map
+    for (int row = -1; row <= map.height; row++) {
+        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), this->game));
+        m_objects.append(
+            new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), this->game));
+    }
+    for (int col = 0; col < map.width; col++) {
+        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), this->game));
+        m_objects.append(
+            new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), this->game));
+    }
 
     // Add all objects to the scene
     for (auto object : m_objects) {
@@ -72,14 +82,15 @@ void GameScene::start() {
 }
 
 void GameScene::tick() {
-    //this->game->tick();
-    //GameInfo info = this->game->getGameInfo();
-    //this->serializer.addStep(info);
-    
-    GameInfo info = this->serializer.getStep();
-    if (info.state != GameState::Playing) {
-        exit(0);
-    }
+    this->game->tick();
+    GameInfo info = this->game->getGameInfo();
+
+    // this->serializer.addStep(info);
+
+    // GameInfo info = this->serializer.getStep();
+    // if (info.state != GameState::Playing) {
+    //     exit(0);
+    // }
 
     // if (info.state != GameState::Playing) {
     //     // Serialize shit
