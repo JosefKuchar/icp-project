@@ -3,12 +3,6 @@
 #include <iostream>
 #include "globals.hpp"
 
-#include "empty_sprite.hpp"
-#include "ghost_sprite.hpp"
-#include "key_sprite.hpp"
-#include "pacman_sprite.hpp"
-#include "target_sprite.hpp"
-
 GameScene::GameScene(MapInfo& map) {
     this->game = new Game(map);
     this->serializer = Serializer(map);
@@ -22,45 +16,47 @@ GameScene::GameScene(MapInfo& map) {
     for (int row = 0; row < map.height; ++row) {
         for (int col = 0; col < map.width; ++col) {
             QPoint position(col, row);
-            m_objects.append(new EmptySprite(position, this->game));
+            m_objects.append(new Sprite(QPixmap(":assets/grass.png"), position, -1, this->game));
             switch (map.map[row][col]) {
                 case Tile::Player:
-                    m_player = new PacmanSprite(position, this->game);
+                    m_player = new Sprite(QPixmap(":assets/pacman.png"), position, 10, this->game);
                     m_objects.append(m_player);
                     break;
                 case Tile::Ghost: {
-                    auto ghost = new GhostSprite(position, this->game);
+                    auto ghost = new Sprite(QPixmap(":assets/ghost.png"), position, 20, this->game);
                     m_objects.append(ghost);
                     m_ghosts.append(ghost);
                     break;
                 }
                 case Tile::Wall:
-                    m_objects.append(new Sprite(QPixmap(":assets/wall.png"), position, this->game));
+                    m_objects.append(
+                        new Sprite(QPixmap(":assets/wall.png"), position, 0, this->game));
                     break;
                 case Tile::Empty:
                     break;
                 case Tile::Key: {
-                    auto key = new KeySprite(position, this->game);
+                    auto key = new Sprite(QPixmap(":assets/key.png"), position, 0, this->game);
                     m_objects.append(key);
                     m_keys.append(key);
                     break;
                 }
                 case Tile::Target:
-                    m_objects.append(new TargetSprite(position, this->game));
+                    m_objects.append(
+                        new Sprite(QPixmap(":assets/target.png"), position, 0, this->game));
                     break;
             }
         }
     }
     // Draw walls around the map
     for (int row = -1; row <= map.height; row++) {
-        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), this->game));
+        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), 0, this->game));
         m_objects.append(
-            new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), this->game));
+            new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), 0, this->game));
     }
     for (int col = 0; col < map.width; col++) {
-        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), this->game));
+        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), 0, this->game));
         m_objects.append(
-            new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), this->game));
+            new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), 0, this->game));
     }
 
     // Add all objects to the scene

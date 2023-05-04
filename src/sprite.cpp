@@ -2,12 +2,15 @@
 #include <iostream>
 #include "globals.hpp"
 
-Sprite::Sprite(const QPixmap& pixmap, QPoint position, Game* game) : QGraphicsPixmapItem(pixmap) {
+Sprite::Sprite(const QPixmap& pixmap, QPoint position, int zIndex, Game* game)
+    : QGraphicsPixmapItem(pixmap) {
     m_game = game;
     // Set inital position
     m_position = position;
     m_nextPosition = position;
     this->setPos(pixmap.width() * m_position.x(), pixmap.height() * m_position.y());
+    // Set z-index
+    this->setZValue(zIndex);
     // Setup animation
     m_animation = new QVariantAnimation();
     m_animation->setEasingCurve(QEasingCurve::InOutCubic);
@@ -31,7 +34,7 @@ void Sprite::setPosition(QPoint position) {
 }
 
 void Sprite::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    (void) event;
+    (void)event;
     this->m_game->setTargetPosition(Point(this->m_nextPosition.x(), this->m_nextPosition.y()));
 }
 

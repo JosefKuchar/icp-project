@@ -5,7 +5,7 @@
 
 class Sprite : public QGraphicsPixmapItem {
    public:
-    Sprite(const QPixmap& pixmap, QPoint position, Game* game);
+    Sprite(const QPixmap& pixmap, QPoint position, int zIndex, Game* game);
     void setPosition(QPoint position);
     QPoint getPosition();
     void update();
