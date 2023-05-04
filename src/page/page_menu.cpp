@@ -1,7 +1,9 @@
 #include "page_menu.hpp"
+#include <QFileDialog>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
+#include <iostream>
 #include "page.hpp"
 
 MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
@@ -10,8 +12,16 @@ MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
     button->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     // Set page on button click
     connect(button, &QPushButton::clicked, [this]() {
-        QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
-        widget->setCurrentIndex((int)Page::Play);
+        // Open dialog to select map
+        QFileDialog dialog(this, "Select Map", "");
+        dialog.setFileMode(QFileDialog::ExistingFile);
+        if (dialog.exec()) {
+            auto filename = dialog.selectedFiles().first();
+            std::cout << filename.toStdString() << std::endl;
+            // TODO Load map
+            QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
+            widget->setCurrentIndex((int)Page::Play);
+        }
     });
 
     // Add to layout
