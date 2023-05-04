@@ -84,6 +84,8 @@ void GameScene::start() {
 void GameScene::tick() {
     this->game->tick();
     GameInfo info = this->game->getGameInfo();
+    if (info.state != GameState::Playing) {
+    }
 
     // this->serializer.addStep(info);
 

@@ -3,4 +3,5 @@
 enum class Page {
     Menu,
     Play,
+    End,
 };
