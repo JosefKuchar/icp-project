@@ -2,7 +2,7 @@
 
 #include <QKeyEvent>
 #include <QMainWindow>
-#include "game_scene.hpp"
+#include <QStackedWidget>
 #include "serializer.hpp"
 
 class MainWindow : public QMainWindow {
