@@ -8,10 +8,10 @@
 
 MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
     // Add button
-    QPushButton* button = new QPushButton("Start Game", this);
-    button->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+    QPushButton* playButton = new QPushButton("Start Game", this);
+    playButton->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     // Set page on button click
-    connect(button, &QPushButton::clicked, [this]() {
+    connect(playButton, &QPushButton::clicked, [this]() {
         // Open dialog to select map
         QFileDialog dialog(this, "Select Map", "");
         dialog.setFileMode(QFileDialog::ExistingFile);
@@ -24,9 +24,22 @@ MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
         }
     });
 
+    QPushButton* loadButton = new QPushButton("Load Replay", this);
+    loadButton->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+    connect(loadButton, &QPushButton::clicked, [this]() {
+        QFileDialog dialog(this, "Load Replay", "", "ICP Pacman (*.icpacman)");
+        dialog.setFileMode(QFileDialog::ExistingFile);
+        if (dialog.exec()) {
+            auto filename = dialog.selectedFiles().first();
+            std::cout << filename.toStdString() << std::endl;
+            // TODO Load replay
+        }
+    });
+
     // Add to layout
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addWidget(button);
+    layout->addWidget(playButton);
+    layout->addWidget(loadButton);
     this->setLayout(layout);
 }
 
