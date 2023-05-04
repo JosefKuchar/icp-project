@@ -126,6 +126,8 @@ void PlayPage::tick() {
     this->game->tick();
     GameInfo info = this->game->getGameInfo();
     if (info.state != GameState::Playing) {
+        QStackedWidget* stackedWidget = (QStackedWidget*)this->parentWidget();
+        stackedWidget->setCurrentIndex((int)Page::End);
     }
 
     // this->serializer.addStep(info);
