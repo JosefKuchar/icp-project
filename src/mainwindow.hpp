@@ -3,12 +3,7 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include "game_scene.hpp"
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
+#include "serializer.hpp"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -17,6 +12,7 @@ class MainWindow : public QMainWindow {
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
     std::string mapPath;
+    Serializer serializer;
 
    private:
     QStackedWidget* stackedWidget;

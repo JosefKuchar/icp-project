@@ -3,7 +3,10 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
+#include <fstream>
 #include <iostream>
+#include "../mainwindow.hpp"
+#include "boost_libs/boost/archive/text_oarchive.hpp"
 #include "page.hpp"
 
 EndPage::EndPage(QWidget* parent) : QWidget(parent) {
@@ -23,14 +26,18 @@ EndPage::EndPage(QWidget* parent) : QWidget(parent) {
         dialog.setAcceptMode(QFileDialog::AcceptSave);
         dialog.setDefaultSuffix(".icpacman");
         if (dialog.exec()) {
+            MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
             auto filename = dialog.selectedFiles().first();
-            // TODO Save
+            std::ofstream outfile(filename.toStdString());
+            boost::archive::text_oarchive archive(outfile);
+            archive << window->serializer;
         }
     });
 
     // Add to layout
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(backButton);
+    layout->addWidget(saveButton);
     this->setLayout(layout);
 }
 
