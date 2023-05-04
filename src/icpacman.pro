@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17 debug 
+CONFIG += c++17 debug
 
 LIBS += -L../src/ -l:libbboost_serialization.a
 
@@ -11,9 +11,6 @@ SOURCES += $$files(*.cpp, true)
 HEADERS += $$files(*.hpp, true)
 
 EXCLUDE += build
-
-FORMS += \
-    mainwindow.ui
 
 RESOURCES = assets.qrc
 

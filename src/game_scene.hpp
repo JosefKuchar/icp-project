@@ -7,8 +7,6 @@
 #include "maploader.hpp"
 #include "serializer.hpp"
 #include "sprite.hpp"
-#include "ui_mainwindow.h"
-
 
 class GameScene : public QGraphicsScene {
     Q_OBJECT

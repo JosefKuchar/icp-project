@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QKeyEvent>
 #include <QMainWindow>
@@ -17,10 +16,7 @@ class MainWindow : public QMainWindow {
    public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
-    void keyPressEvent(QKeyEvent* event) override;
 
    private:
-    Ui::MainWindow* ui;
-    GameScene* m_gameScene;
+    QStackedWidget* stackedWidget;
 };
-#endif  // MAINWINDOW_H
