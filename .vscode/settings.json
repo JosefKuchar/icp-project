@@ -63,6 +63,13 @@
     "numbers": "cpp",
     "semaphore": "cpp",
     "stop_token": "cpp",
-    "qvboxlayout": "cpp"
+    "qvboxlayout": "cpp",
+    "strstream": "cpp",
+    "complex": "cpp",
+    "set": "cpp",
+    "iomanip": "cpp",
+    "cfenv": "cpp",
+    "typeindex": "cpp",
+    "valarray": "cpp"
   }
 }

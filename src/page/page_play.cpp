@@ -2,11 +2,14 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
-
+#include "../mainwindow.hpp"
 #include "maploader.hpp"
 
-PlayPage::PlayPage(QWidget* parent) : QWidget(parent) {
-    MapInfo map = MapInfo("./examples/intro.txt");
+PlayPage::PlayPage(QWidget* parent) : QWidget(parent) {}
+
+void PlayPage::showEvent(QShowEvent* event) {
+    MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
+    MapInfo map = MapInfo(window->mapPath);
     m_gameScene = new GameScene(map);
     m_gameScene->start();
 

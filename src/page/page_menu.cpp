@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <iostream>
+#include "../mainwindow.hpp"
 #include "page.hpp"
 
 MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
@@ -17,9 +18,9 @@ MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
         dialog.setFileMode(QFileDialog::ExistingFile);
         if (dialog.exec()) {
             auto filename = dialog.selectedFiles().first();
-            std::cout << filename.toStdString() << std::endl;
-            // TODO Load map
             QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
+            MainWindow* mainWindow = (MainWindow*)widget->parentWidget();
+            mainWindow->mapPath = filename.toStdString();
             widget->setCurrentIndex((int)Page::Play);
         }
     });

@@ -10,6 +10,7 @@ class PlayPage : public QWidget {
     void keyPressEvent(QKeyEvent* event) override;
     PlayPage(QWidget* parent = nullptr);
     ~PlayPage();
+    void showEvent(QShowEvent* event) override;
 
    private:
     GameScene* m_gameScene;
