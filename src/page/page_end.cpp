@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include "../mainwindow.hpp"
-#include "boost_libs/boost/archive/text_oarchive.hpp"
+#include "boost/archive/text_oarchive.hpp"
 #include "page.hpp"
 
 EndPage::EndPage(QWidget* parent) : QWidget(parent) {

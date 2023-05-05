@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include "../maploader.hpp"
-#include "boost_libs/boost/serialization/vector.hpp"
+#include "boost/serialization/vector.hpp"
 #include "direction.hpp"
 #include "ghost.hpp"
 #include "map.hpp"

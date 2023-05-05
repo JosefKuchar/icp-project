@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "boost_libs/boost/archive/text_iarchive.hpp"
-#include "boost_libs/boost/archive/text_oarchive.hpp"
+#include "boost/archive/text_iarchive.hpp"
+#include "boost/archive/text_oarchive.hpp"
 
 class InvalidMapException : public std::exception {
    public:

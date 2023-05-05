@@ -5,8 +5,8 @@
 
 #include <fstream>
 
-#include "boost_libs/boost/archive/text_iarchive.hpp"
-#include "boost_libs/boost/archive/text_oarchive.hpp"
+#include "boost/archive/text_iarchive.hpp"
+#include "boost/archive/text_oarchive.hpp"
 
 Game::Game(MapInfo map) {
     this->m_gameState = GameState::Playing;
