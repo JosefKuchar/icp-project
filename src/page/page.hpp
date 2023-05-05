@@ -13,5 +13,6 @@
 enum class Page {
     Menu,
     Play,
+    Replay,
     End,
 };

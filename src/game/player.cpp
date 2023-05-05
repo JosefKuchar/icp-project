@@ -36,6 +36,11 @@ void Player::tick() {
             return;
         }
         std::vector<Point> path = this->calculateDirection();
+        
+        if (path.size() < 2) {
+            this->m_movementMode = MovementMode::None;
+            return;
+        }
 
         Point point = path[1];
 
@@ -63,8 +68,8 @@ std::vector<Point> Player::calculateDirection() {
         return abs(x - end_x) + abs(y - end_y);
     };
 
-    int rows = map.size();
-    int cols = map[0].size();
+    int cols = map.size();
+    int rows = map[0].size();
 
     priority_queue<pair<int, Point>, vector<pair<int, Point>>, greater<pair<int, Point>>> op;
     vector<vector<int>> g(rows, vector<int>(cols, INT_MAX));

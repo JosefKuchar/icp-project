@@ -11,6 +11,10 @@ void Serializer::addStep(GameInfo info) {
     ticks.push_back(info);
 }
 
+void Serializer::clearSteps() {
+    ticks.clear();
+}
+
 Serializer::Serializer() {}
 
 Serializer::Serializer(MapInfo map) {

@@ -13,6 +13,7 @@
 #include <iostream>
 #include "../mainwindow.hpp"
 #include "page.hpp"
+#include <fstream>
 
 MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
     // Add button
@@ -27,6 +28,7 @@ MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
             auto filename = dialog.selectedFiles().first();
             QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
             MainWindow* mainWindow = (MainWindow*)widget->parentWidget();
+            mainWindow->serializer.clearSteps();
             mainWindow->mapPath = filename.toStdString();
             widget->setCurrentIndex((int)Page::Play);
         }
@@ -39,8 +41,14 @@ MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
         dialog.setFileMode(QFileDialog::ExistingFile);
         if (dialog.exec()) {
             auto filename = dialog.selectedFiles().first();
-            std::cout << filename.toStdString() << std::endl;
-            // TODO Load replay
+            QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
+            MainWindow* mainWindow = (MainWindow*)widget->parentWidget();
+            {
+                std::ifstream infile(filename.toStdString());
+                boost::archive::text_iarchive archive2(infile);
+                archive2 >> mainWindow->serializer;
+            }
+            widget->setCurrentIndex((int)Page::Replay);
         }
     });
 

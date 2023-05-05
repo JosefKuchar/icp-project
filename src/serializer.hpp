@@ -28,5 +28,6 @@ class Serializer {
     Serializer(MapInfo);
     ~Serializer();
     void addStep(GameInfo info);
+    void clearSteps();
     GameInfo getStep();
 };

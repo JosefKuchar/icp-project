@@ -45,15 +45,22 @@ void Game::tick() {
         return;
     }
     // Update player
+
+    Point prev_pos = this->m_player.position;
+
+
+    std::vector<Point> prev_ghosts_pos;
+    std::transform(this->m_ghosts.begin(), this->m_ghosts.end(), std::back_inserter(prev_ghosts_pos), [](auto& ghost) { return ghost.position; });
+
     this->m_player.tick();
     // Update ghosts
     for (auto& ghost : this->m_ghosts) {
         ghost.tick();
     }
+
     // Check for collision with ghost
-    // TODO: There is a bug where player and ghost can go through each other
-    for (auto& ghost : this->m_ghosts) {
-        if (this->m_player.position == ghost.position) {
+    for (int i = 0; i < m_ghosts.size(); i++) {
+        if (this->m_player.position == m_ghosts[i].position or (prev_pos == m_ghosts[i].position and this->m_player.position == prev_ghosts_pos[i])) {
             std::cout << "Lost!" << std::endl;
             this->m_gameState = GameState::Lost;
             return;

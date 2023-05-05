@@ -5,7 +5,6 @@
  * @brief PlayPage implementation
  */
 
-#include "page_play.hpp"
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
@@ -13,8 +12,9 @@
 #include "globals.hpp"
 #include "maploader.hpp"
 #include "page.hpp"
+#include "page_replay.hpp"
 
-PlayPage::PlayPage(QWidget* parent) : QWidget(parent) {
+ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
     this->timer = new QTimer(this);
     QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
 
@@ -23,40 +23,57 @@ PlayPage::PlayPage(QWidget* parent) : QWidget(parent) {
     m_gameScene = new QGraphicsScene(this);
     QGraphicsView* view = new QGraphicsView(m_gameScene);
 
+    QPushButton* playBackwards = new QPushButton("Play backwards", this);
+    playBackwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+
+    QPushButton* stepBackwards = new QPushButton("Step backwards", this);
+    stepBackwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+
+    QPushButton* stop = new QPushButton("Stop", this);
+    stop->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+
+    QPushButton* stepForwards = new QPushButton("Step forwards", this);
+    stepForwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+
+    QPushButton* playForwards = new QPushButton("Play forwards", this);
+    playForwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+
     layout->addWidget(view);
+    layout->addWidget(playBackwards);
+    layout->addWidget(stepBackwards);
+    layout->addWidget(stop);
+    layout->addWidget(stepForwards);
+    layout->addWidget(playForwards);
+
     this->setLayout(layout);
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
-void PlayPage::showEvent(QShowEvent* event) {
+void ReplayPage::showEvent(QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     try {
-        MapInfo map = MapInfo(window->mapPath);
-        window->serializer.map = map;
+        
+        MapInfo map = window->serializer.map;
         this->game = new Game(map);
 
         // Create all objects
         for (int row = 0; row < map.height; ++row) {
             for (int col = 0; col < map.width; ++col) {
                 QPoint position(col, row);
-                m_objects.append(
-                    new Sprite(QPixmap(":assets/grass.png"), position, -1, this->game));
+                m_objects.append(new Sprite(QPixmap(":assets/grass.png"), position, -1, this->game));
                 switch (map.map[row][col]) {
                     case Tile::Player:
-                        m_player =
-                            new Sprite(QPixmap(":assets/pacman.png"), position, 10, this->game);
+                        m_player = new Sprite(QPixmap(":assets/pacman.png"), position, 10, this->game);
                         m_objects.append(m_player);
                         break;
                     case Tile::Ghost: {
-                        auto ghost =
-                            new Sprite(QPixmap(":assets/ghost.png"), position, 20, this->game);
+                        auto ghost = new Sprite(QPixmap(":assets/ghost.png"), position, 20, this->game);
                         m_objects.append(ghost);
                         m_ghosts.append(ghost);
                         break;
                     }
                     case Tile::Wall:
-                        m_objects.append(
-                            new Sprite(QPixmap(":assets/wall.png"), position, 0, this->game));
+                        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), position, 0, this->game));
                         break;
                     case Tile::Empty:
                         break;
@@ -67,24 +84,19 @@ void PlayPage::showEvent(QShowEvent* event) {
                         break;
                     }
                     case Tile::Target:
-                        m_objects.append(
-                            new Sprite(QPixmap(":assets/target.png"), position, 0, this->game));
+                        m_objects.append(new Sprite(QPixmap(":assets/target.png"), position, 0, this->game));
                         break;
                 }
             }
         }
         // Draw walls around the map
         for (int row = -1; row <= map.height; row++) {
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), 0, this->game));
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), 0, this->game));
+            m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), 0, this->game));
+            m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), 0, this->game));
         }
         for (int col = 0; col < map.width; col++) {
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), 0, this->game));
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), 0, this->game));
+            m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), 0, this->game));
+            m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), 0, this->game));
         }
 
         // Add all objects to the scene
@@ -106,32 +118,11 @@ void PlayPage::showEvent(QShowEvent* event) {
     }
 }
 
-void PlayPage::keyPressEvent(QKeyEvent* event) {
-    switch (event->key()) {
-        case Qt::Key_Up:
-        case Qt::Key_W:
-            this->game->setDirection(Direction::Up);
-            break;
-        case Qt::Key_Down:
-        case Qt::Key_S:
-            this->game->setDirection(Direction::Down);
-            break;
-        case Qt::Key_Left:
-        case Qt::Key_A:
-            this->game->setDirection(Direction::Left);
-            break;
-        case Qt::Key_Right:
-        case Qt::Key_D:
-            this->game->setDirection(Direction::Right);
-            break;
-    }
-}
-
-void PlayPage::start() {
+void ReplayPage::start() {
     this->timer->start(globals::TICK_RATE);
 }
 
-void PlayPage::end() {
+void ReplayPage::end() {
     // Stop timer
     this->timer->stop();
     // Delete all objects from game scene
@@ -144,11 +135,9 @@ void PlayPage::end() {
     stackedWidget->setCurrentIndex((int)Page::End);
 }
 
-void PlayPage::tick() {
-    this->game->tick();
-    GameInfo info = this->game->getGameInfo();
+void ReplayPage::tick() {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
-    window->serializer.addStep(info);
+    GameInfo info = window->serializer.getStep();
     if (info.state != GameState::Playing) {
         this->end();
         return;
@@ -170,4 +159,4 @@ void PlayPage::tick() {
     }
 }
 
-PlayPage::~PlayPage() {}
+ReplayPage::~ReplayPage() {}

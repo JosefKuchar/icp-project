@@ -11,13 +11,12 @@
 #include <QtWidgets>
 #include "sprite.hpp"
 
-class PlayPage : public QWidget {
+class ReplayPage : public QWidget {
     Q_OBJECT
 
    public:
-    void keyPressEvent(QKeyEvent* event) override;
-    PlayPage(QWidget* parent = nullptr);
-    ~PlayPage();
+    ReplayPage(QWidget* parent = nullptr);
+    ~ReplayPage();
     void showEvent(QShowEvent* event) override;
     void start();
     void end();
