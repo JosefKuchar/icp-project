@@ -124,15 +124,18 @@ void PlayPage::keyPressEvent(QKeyEvent* event) {
 }
 
 void PlayPage::start() {
-    QTimer* timer = new QTimer(this);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
-    timer->start(globals::TICK_RATE);
+    this->timer = new QTimer(this);
+    QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
+    this->timer->start(globals::TICK_RATE);
 }
 
 void PlayPage::tick() {
     this->game->tick();
     GameInfo info = this->game->getGameInfo();
     if (info.state != GameState::Playing) {
+        // Stop timer
+        this->timer->stop();
+        // Go to end page
         QStackedWidget* stackedWidget = (QStackedWidget*)this->parentWidget();
         stackedWidget->setCurrentIndex((int)Page::End);
     }

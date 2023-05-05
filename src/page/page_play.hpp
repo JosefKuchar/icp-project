@@ -27,6 +27,7 @@ class PlayPage : public QWidget {
     void tick();
 
    private:
+    QTimer* timer;
     Game* game;
     QGraphicsScene* m_gameScene;
     int m_rows;
