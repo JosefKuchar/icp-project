@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file player.hpp
+ * @brief Player header
+ */
+
 #pragma once
 #include "map.hpp"
 #include "object.hpp"
@@ -14,7 +21,7 @@ class Player : public Object {
     Point m_targetPosition;
     Direction m_direction;
     MovementMode m_movementMode;
-    
+
    public:
     Player();
     Player(Map* map, Point position);

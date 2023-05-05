@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file page_play.cpp
+ * @brief PlayPage implementation
+ */
+
 #include "page_play.hpp"
 #include <QPushButton>
 #include <QStackedWidget>

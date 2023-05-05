@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file ghost.hpp
+ * @brief Ghost header
+ */
+
 #pragma once
 
 #include "object.hpp"

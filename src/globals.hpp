@@ -1,6 +1,15 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file globals.hpp
+ * @brief Global constants (settings)
+ */
+
 #pragma once
 
 namespace globals {
-constexpr int TICK_RATE = 300;           // One tick takes 300 ms
-constexpr int ANIMATION_DURATION = 200;  // Animation takes 290 ms
+/// Tick rate (ms)
+constexpr int TICK_RATE = 300;
+/// Animation duration (ms)
+constexpr int ANIMATION_DURATION = 250;
 }  // namespace globals

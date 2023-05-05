@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file sprite.cpp
+ * @brief Sprite implementation
+ */
+
 #include "sprite.hpp"
 #include <iostream>
 #include "globals.hpp"

@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file serializer.hpp
+ * @brief Serializer header
+ */
+
 #pragma once
 
 #include <vector>

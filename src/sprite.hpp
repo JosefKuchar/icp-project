@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file sprite.hpp
+ * @brief Sprite header
+ */
+
 #pragma once
 
 #include <QtWidgets>

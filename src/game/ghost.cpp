@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file ghost.cpp
+ * @brief Ghost implementation
+ */
+
 #include "ghost.hpp"
 #include <random>
 #include "direction.hpp"

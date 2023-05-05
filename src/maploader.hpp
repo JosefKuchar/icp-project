@@ -1,3 +1,9 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file maploader.hpp
+ * @brief Map loader header
+ */
 
 #pragma once
 

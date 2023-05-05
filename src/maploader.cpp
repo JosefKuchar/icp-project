@@ -1,8 +1,15 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file maploader.cpp
+ * @brief Map loader implementation
+ */
+
 #include "maploader.hpp"
 
-#include <regex>
 #include <fstream>
 #include <iostream>
+#include <regex>
 #include <sstream>
 
 constexpr auto to_tile(char c) {
@@ -36,35 +43,35 @@ MapInfo::MapInfo(std::string path) {
     if (!newfile.is_open()) {
         throw InvalidFileException(path);
     }
-    
+
     std::smatch matches;
     std::string line;
 
     int i;
 
     for (i = 0; getline(newfile, line); i++) {
-      if (i == 0) {
-        if (std::regex_search(line, matches, std::regex("^(\\d+) (\\d+)$"))) {
-          width = std::stoi(matches[1]);
-          height = std::stoi(matches[2]);
-          continue;
-        } else {
-          throw InvalidMapException();
+        if (i == 0) {
+            if (std::regex_search(line, matches, std::regex("^(\\d+) (\\d+)$"))) {
+                width = std::stoi(matches[1]);
+                height = std::stoi(matches[2]);
+                continue;
+            } else {
+                throw InvalidMapException();
+            }
         }
-      }
 
-      if (line.size() != (long unsigned int)width) {
-        throw InvalidMapException();
-      }
+        if (line.size() != (long unsigned int)width) {
+            throw InvalidMapException();
+        }
 
-      std::vector<Tile> line_vec;
-      for (auto &c : line) {
-        line_vec.push_back(to_tile(c));
-      }
+        std::vector<Tile> line_vec;
+        for (auto& c : line) {
+            line_vec.push_back(to_tile(c));
+        }
 
-      map.push_back(line_vec);
+        map.push_back(line_vec);
     }
     if (i - 1 != height) {
-      throw InvalidMapException();
+        throw InvalidMapException();
     }
 }

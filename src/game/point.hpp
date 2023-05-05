@@ -1,3 +1,10 @@
+/**
+ * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
+ * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
+ * @file point.hpp
+ * @brief Point implementation
+ */
+
 #pragma once
 
 #include "direction.hpp"
