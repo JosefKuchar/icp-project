@@ -23,8 +23,6 @@ Serializer::Serializer(MapInfo map) {
 
 Serializer::~Serializer() {}
 
-GameInfo Serializer::getStep() {
-    GameInfo info = ticks.front();
-    ticks.erase(ticks.begin());
-    return info;
+GameInfo Serializer::getStep(size_t index) {
+    return this->ticks[index];
 }

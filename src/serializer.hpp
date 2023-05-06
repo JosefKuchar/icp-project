@@ -29,5 +29,5 @@ class Serializer {
     ~Serializer();
     void addStep(GameInfo info);
     void clearSteps();
-    GameInfo getStep();
+    GameInfo getStep(size_t index);
 };

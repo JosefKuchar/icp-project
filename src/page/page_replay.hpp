@@ -11,6 +11,8 @@
 #include <QtWidgets>
 #include "sprite.hpp"
 
+enum class ReplayMode { Backwards, Stopped, Forwards };
+
 class ReplayPage : public QWidget {
     Q_OBJECT
 
@@ -20,6 +22,7 @@ class ReplayPage : public QWidget {
     void showEvent(QShowEvent* event) override;
     void start();
     void end();
+    void draw();
     void updatePositions();
     void setDirection(QPoint direction);
 
@@ -32,6 +35,8 @@ class ReplayPage : public QWidget {
     QGraphicsScene* m_gameScene;
     int m_rows;
     int m_cols;
+    size_t frameIndex;
+    ReplayMode replayMode;
     Sprite* m_player;
     QList<Sprite*> m_ghosts;
     QList<Sprite*> m_keys;
