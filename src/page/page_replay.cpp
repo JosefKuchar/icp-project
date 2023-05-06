@@ -15,15 +15,8 @@
 #include "maploader.hpp"
 #include "page.hpp"
 
-ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
-    this->timer = new QTimer(this);
-    QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
-
-    // Add to layout
-    QVBoxLayout* layout = new QVBoxLayout(this);
+ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
     QHBoxLayout* buttonLayout = new QHBoxLayout(this);
-    m_gameScene = new QGraphicsScene(this);
-    this->view = new QGraphicsView(m_gameScene);
 
     QPushButton* playBackwards = new QPushButton("Play backwards", this);
     playBackwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
@@ -40,7 +33,7 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
         if (this->frameIndex > 0) {
             this->frameIndex--;
         }
-        this->draw();
+        this->getStepAndDraw();
     });
 
     QPushButton* stop = new QPushButton("Stop", this);
@@ -59,7 +52,7 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
         if (this->frameIndex < window->serializer.ticks.size() - 1) {
             this->frameIndex++;
         }
-        this->draw();
+        this->getStepAndDraw();
     });
 
     QPushButton* playForwards = new QPushButton("Play forwards", this);
@@ -72,15 +65,13 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
     QPushButton* backMenu = new QPushButton("Back to menu", this);
     backMenu->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(backMenu, &QPushButton::clicked, [this]() {
+        this->clear();
+        this->frameIndex = 0;
         this->replayMode = ReplayMode::Stopped;
-        this->timer->stop();
-        this->end();
         QStackedWidget* stackedWidget = (QStackedWidget*)this->parentWidget();
         stackedWidget->setCurrentIndex((int)Page::Menu);
     });
 
-    layout->addWidget(view);
-    layout->addLayout(buttonLayout);
     buttonLayout->addWidget(playBackwards);
     buttonLayout->addWidget(stepBackwards);
     buttonLayout->addWidget(stop);
@@ -88,8 +79,9 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
     buttonLayout->addWidget(playForwards);
     buttonLayout->addWidget(backMenu);
 
-    this->setLayout(layout);
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->layout->addLayout(buttonLayout);
+    this->frameIndex = 0;
+    this->replayMode = ReplayMode::Stopped;
 }
 
 void ReplayPage::showEvent(QShowEvent* event) {
@@ -97,65 +89,7 @@ void ReplayPage::showEvent(QShowEvent* event) {
     try {
         MapInfo map = window->serializer.map;
         this->game = new Game(map);
-
-        // Create all objects
-        for (int row = 0; row < map.height; ++row) {
-            for (int col = 0; col < map.width; ++col) {
-                QPoint position(col, row);
-                m_objects.append(
-                    new Sprite(QPixmap(":assets/grass.png"), position, -1, this->game));
-                switch (map.map[row][col]) {
-                    case Tile::Player:
-                        m_player =
-                            new Sprite(QPixmap(":assets/pacman.png"), position, 10, this->game);
-                        m_objects.append(m_player);
-                        break;
-                    case Tile::Ghost: {
-                        auto ghost =
-                            new Sprite(QPixmap(":assets/ghost.png"), position, 20, this->game);
-                        m_objects.append(ghost);
-                        m_ghosts.append(ghost);
-                        break;
-                    }
-                    case Tile::Wall:
-                        m_objects.append(
-                            new Sprite(QPixmap(":assets/wall.png"), position, 0, this->game));
-                        break;
-                    case Tile::Empty:
-                        break;
-                    case Tile::Key: {
-                        auto key = new Sprite(QPixmap(":assets/key.png"), position, 0, this->game);
-                        m_objects.append(key);
-                        m_keys.append(key);
-                        break;
-                    }
-                    case Tile::Target:
-                        m_objects.append(
-                            new Sprite(QPixmap(":assets/target.png"), position, 0, this->game));
-                        break;
-                }
-            }
-        }
-        // Draw walls around the map
-        for (int row = -1; row <= map.height; row++) {
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), 0, this->game));
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), 0, this->game));
-        }
-        for (int col = 0; col < map.width; col++) {
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), 0, this->game));
-            m_objects.append(
-                new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), 0, this->game));
-        }
-
-        // Add all objects to the scene
-        for (auto object : m_objects) {
-            m_gameScene->addItem(object);
-        }
-
-        this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+        this->drawMap(map);
     } catch (std::exception& e) {
         // Show error dialog
         QMessageBox msgBox;
@@ -167,20 +101,6 @@ void ReplayPage::showEvent(QShowEvent* event) {
         widget->setCurrentIndex((int)Page::Menu);
         return;
     }
-}
-
-void ReplayPage::resizeEvent(QResizeEvent* event) {
-    this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
-}
-
-void ReplayPage::end() {
-    // Stop timer
-    this->timer->stop();
-    // Delete all objects from game scene
-    this->m_gameScene->clear();
-    this->m_objects.clear();
-    this->m_ghosts.clear();
-    this->m_keys.clear();
 }
 
 void ReplayPage::tick() {
@@ -199,27 +119,13 @@ void ReplayPage::tick() {
             }
             break;
     }
-    this->draw();
+    this->getStepAndDraw();
 }
 
-void ReplayPage::draw() {
-    std::cout << this->frameIndex << std::endl;
+void ReplayPage::getStepAndDraw() {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     GameInfo info = window->serializer.getStep(this->frameIndex);
-    m_player->setPosition(QPoint(info.playerPosition.x, info.playerPosition.y));
-    for (int i = 0; i < m_ghosts.size(); ++i) {
-        m_ghosts[i]->setPosition(QPoint(info.ghostPositions[i].x, info.ghostPositions[i].y));
-    }
-    for (auto& key : m_keys) {
-        bool found = false;
-        for (auto& keyInfo : info.keyPositions) {
-            if (key->getPosition() == QPoint(keyInfo.x, keyInfo.y)) {
-                found = true;
-                break;
-            }
-        }
-        key->setVisible(found);
-    }
+    this->draw(info);
 }
 
 ReplayPage::~ReplayPage() {}
