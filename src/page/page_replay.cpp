@@ -23,7 +23,7 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(this);
     m_gameScene = new QGraphicsScene(this);
-    QGraphicsView* view = new QGraphicsView(m_gameScene);
+    this->view = new QGraphicsView(m_gameScene);
 
     QPushButton* playBackwards = new QPushButton("Play backwards", this);
     playBackwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
@@ -154,6 +154,8 @@ void ReplayPage::showEvent(QShowEvent* event) {
         for (auto object : m_objects) {
             m_gameScene->addItem(object);
         }
+
+        this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
     } catch (std::exception& e) {
         // Show error dialog
         QMessageBox msgBox;
@@ -165,6 +167,10 @@ void ReplayPage::showEvent(QShowEvent* event) {
         widget->setCurrentIndex((int)Page::Menu);
         return;
     }
+}
+
+void ReplayPage::resizeEvent(QResizeEvent* event) {
+    this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
 void ReplayPage::end() {

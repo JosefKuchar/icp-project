@@ -20,6 +20,7 @@ class ReplayPage : public QWidget {
     ReplayPage(QWidget* parent = nullptr);
     ~ReplayPage();
     void showEvent(QShowEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
     void start();
     void end();
     void draw();
@@ -33,6 +34,7 @@ class ReplayPage : public QWidget {
     QTimer* timer;
     Game* game;
     QGraphicsScene* m_gameScene;
+    QGraphicsView* view;
     int m_rows;
     int m_cols;
     size_t frameIndex;
