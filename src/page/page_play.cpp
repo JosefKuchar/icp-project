@@ -71,6 +71,7 @@ void PlayPage::tick() {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     window->serializer.addStep(info);
     if (info.state != GameState::Playing) {
+        window->lastTick = info;
         this->end();
         return;
     }

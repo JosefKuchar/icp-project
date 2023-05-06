@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <QLabel>
 #include <QWidget>
 
 class EndPage : public QWidget {
@@ -15,4 +16,10 @@ class EndPage : public QWidget {
    public:
     EndPage(QWidget* parent = nullptr);
     ~EndPage();
+    void showEvent(QShowEvent* event) override;
+
+   private:
+    QLabel* resultText;
+    QLabel* keyText;
+    QLabel* stepText;
 };

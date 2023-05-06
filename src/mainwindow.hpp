@@ -10,6 +10,7 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QStackedWidget>
+#include "game/game.hpp"
 #include "serializer.hpp"
 
 /**
@@ -30,6 +31,7 @@ class MainWindow : public QMainWindow {
     std::string mapPath;
     /// Object for replays
     Serializer serializer;
+    GameInfo lastTick;
 
    private:
     QStackedWidget* stackedWidget;
