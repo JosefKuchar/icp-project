@@ -31,6 +31,8 @@ class BaseGamePage : public QWidget {
     QGraphicsScene* m_gameScene;
     QGraphicsView* view;
     QVBoxLayout* layout;
+    QLabel* keyText;
+    QLabel* stepText;
     int m_rows;
     int m_cols;
     Sprite* m_player;

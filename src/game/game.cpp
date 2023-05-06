@@ -16,6 +16,7 @@
 #include "boost/archive/text_oarchive.hpp"
 
 Game::Game(MapInfo map) {
+    this->step = 0;
     this->m_gameState = GameState::Playing;
     this->m_map = Map(map);
     for (int y = 0; y < map.height; y++) {
@@ -48,9 +49,9 @@ void Game::tick() {
 
     Point prev_pos = this->m_player.position;
 
-
     std::vector<Point> prev_ghosts_pos;
-    std::transform(this->m_ghosts.begin(), this->m_ghosts.end(), std::back_inserter(prev_ghosts_pos), [](auto& ghost) { return ghost.position; });
+    std::transform(this->m_ghosts.begin(), this->m_ghosts.end(),
+                   std::back_inserter(prev_ghosts_pos), [](auto& ghost) { return ghost.position; });
 
     this->m_player.tick();
     // Update ghosts
@@ -58,9 +59,11 @@ void Game::tick() {
         ghost.tick();
     }
 
+    this->step++;
     // Check for collision with ghost
     for (int i = 0; i < m_ghosts.size(); i++) {
-        if (this->m_player.position == m_ghosts[i].position or (prev_pos == m_ghosts[i].position and this->m_player.position == prev_ghosts_pos[i])) {
+        if (this->m_player.position == m_ghosts[i].position or
+            (prev_pos == m_ghosts[i].position and this->m_player.position == prev_ghosts_pos[i])) {
             std::cout << "Lost!" << std::endl;
             this->m_gameState = GameState::Lost;
             return;

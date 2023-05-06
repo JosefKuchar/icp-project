@@ -20,8 +20,9 @@ void PlayPage::showEvent(QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     try {
         MapInfo map = MapInfo(window->mapPath);
-        window->serializer.map = map;
         this->drawMap(map);
+        window->serializer.map = map;
+        window->serializer.addStep(this->game->getGameInfo());
         this->timer->start(globals::TICK_RATE);
     } catch (std::exception& e) {
         // Show error dialog

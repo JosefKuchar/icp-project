@@ -21,7 +21,13 @@ BaseGamePage::BaseGamePage(QWidget* parent) : QWidget(parent) {
     // Add to layout
     this->layout = new QVBoxLayout(this);
     this->m_gameScene = new QGraphicsScene(this);
+    this->keyText = new QLabel(this);
+    this->stepText = new QLabel(this);
     this->view = new QGraphicsView(m_gameScene);
+    QHBoxLayout* statsLayout = new QHBoxLayout(this);
+    statsLayout->addWidget(keyText);
+    statsLayout->addWidget(stepText);
+    this->layout->addLayout(statsLayout);
     this->layout->addWidget(view);
     this->setLayout(this->layout);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -114,6 +120,19 @@ void BaseGamePage::draw(GameInfo info) {
         }
         key->setVisible(found);
     }
+
+    std::string step_text = "Step: " + std::to_string(info.step);
+    std::string key_text = "Keys: " + std::to_string(info.totalKeys - info.keyPositions.size()) +
+                           "/" + std::to_string(info.totalKeys);
+
+    if (info.keyPositions.size() == 0) {
+        this->keyText->setStyleSheet("QLabel { color : green; }");
+    } else {
+        this->keyText->setStyleSheet("QLabel { color : black; }");
+    }
+
+    this->stepText->setText(step_text.c_str());
+    this->keyText->setText(key_text.c_str());
 }
 
 void BaseGamePage::tick() {}

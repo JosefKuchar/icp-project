@@ -90,6 +90,7 @@ void ReplayPage::showEvent(QShowEvent* event) {
         MapInfo map = window->serializer.map;
         this->game = new Game(map);
         this->drawMap(map);
+        this->getStepAndDraw();
     } catch (std::exception& e) {
         // Show error dialog
         QMessageBox msgBox;

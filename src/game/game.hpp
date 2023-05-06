@@ -28,6 +28,8 @@ struct GameInfo {
     std::vector<Point> ghostPositions;
     std::vector<Point> keyPositions;
     GameState state;
+    size_t step;
+    size_t totalKeys;
 
     template <typename Archive>
     void serialize(Archive& ar, const unsigned int version) {
@@ -35,6 +37,8 @@ struct GameInfo {
         ar& ghostPositions;
         ar& keyPositions;
         ar& state;
+        ar& step;
+        ar& totalKeys;
     };
 };
 
@@ -45,6 +49,7 @@ class Game {
     std::unordered_map<Point, bool> keys;
     Map m_map;
     GameState m_gameState;
+    size_t step;
 
    public:
     Game(MapInfo map);
@@ -82,6 +87,8 @@ class Game {
             }
         }
         info.state = this->m_gameState;
+        info.step = this->step;
+        info.totalKeys = this->keys.size();
         return info;
     }
 };
