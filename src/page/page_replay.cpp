@@ -21,6 +21,7 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
 
     // Add to layout
     QVBoxLayout* layout = new QVBoxLayout(this);
+    QHBoxLayout* buttonLayout = new QHBoxLayout(this);
     m_gameScene = new QGraphicsScene(this);
     QGraphicsView* view = new QGraphicsView(m_gameScene);
 
@@ -68,12 +69,24 @@ ReplayPage::ReplayPage(QWidget* parent) : QWidget(parent) {
         this->timer->start(globals::TICK_RATE);
     });
 
+    QPushButton* backMenu = new QPushButton("Back to menu", this);
+    backMenu->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
+    connect(backMenu, &QPushButton::clicked, [this]() {
+        this->replayMode = ReplayMode::Stopped;
+        this->timer->stop();
+        this->end();
+        QStackedWidget* stackedWidget = (QStackedWidget*)this->parentWidget();
+        stackedWidget->setCurrentIndex((int)Page::Menu);
+    });
+
     layout->addWidget(view);
-    layout->addWidget(playBackwards);
-    layout->addWidget(stepBackwards);
-    layout->addWidget(stop);
-    layout->addWidget(stepForwards);
-    layout->addWidget(playForwards);
+    layout->addLayout(buttonLayout);
+    buttonLayout->addWidget(playBackwards);
+    buttonLayout->addWidget(stepBackwards);
+    buttonLayout->addWidget(stop);
+    buttonLayout->addWidget(stepForwards);
+    buttonLayout->addWidget(playForwards);
+    buttonLayout->addWidget(backMenu);
 
     this->setLayout(layout);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -162,9 +175,6 @@ void ReplayPage::end() {
     this->m_objects.clear();
     this->m_ghosts.clear();
     this->m_keys.clear();
-    // Go to end page
-    QStackedWidget* stackedWidget = (QStackedWidget*)this->parentWidget();
-    stackedWidget->setCurrentIndex((int)Page::End);
 }
 
 void ReplayPage::tick() {
