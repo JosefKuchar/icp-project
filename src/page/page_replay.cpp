@@ -17,7 +17,7 @@
 
 ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
     // Create button layout
-    QHBoxLayout* buttonLayout = new QHBoxLayout(this);
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
 
     // Play backwards button
     QPushButton* playBackwards = new QPushButton("Play backwards", this);

@@ -26,7 +26,7 @@ BaseGamePage::BaseGamePage(QWidget* parent) : QWidget(parent) {
     this->stepText = new QLabel(this);
     this->view = new QGraphicsView(this->gameScene);
     // Create stats layout
-    QHBoxLayout* statsLayout = new QHBoxLayout(this);
+    QHBoxLayout* statsLayout = new QHBoxLayout();
     statsLayout->addWidget(keyText);
     statsLayout->addWidget(stepText);
     // Add to main layout

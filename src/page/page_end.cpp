@@ -54,7 +54,7 @@ EndPage::EndPage(QWidget* parent) : QWidget(parent) {
 
     // Add to layout
     QVBoxLayout* layout = new QVBoxLayout(this);
-    QHBoxLayout* scoreLayout = new QHBoxLayout(this);
+    QHBoxLayout* scoreLayout = new QHBoxLayout();
     layout->addWidget(this->resultText);
     scoreLayout->addWidget(this->stepText);
     scoreLayout->addWidget(this->keyText);
