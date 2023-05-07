@@ -66,7 +66,6 @@ void Game::tick() {
     for (size_t i = 0; i < ghosts.size(); i++) {
         if (this->player.position == this->ghosts[i].position ||
             (prev_pos == this->ghosts[i].position && this->player.position == prev_ghosts_pos[i])) {
-            std::cout << "Lost!" << std::endl;
             this->gameState = GameState::Lost;
             return;
         }
@@ -79,7 +78,6 @@ void Game::tick() {
     // Check if all keys are collected
     if (std::all_of(this->keys.begin(), this->keys.end(), [](auto& key) { return key.second; }) &&
         this->player.position == this->finish) {
-        std::cout << "Won!" << std::endl;
         this->gameState = GameState::Won;
     }
 }
