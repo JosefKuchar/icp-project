@@ -7,4 +7,7 @@
 
 #pragma once
 
+/**
+ * @brief Direction
+ */
 enum class Direction { Up, Down, Left, Right };

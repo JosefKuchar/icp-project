@@ -9,10 +9,17 @@
 
 #include <QWidget>
 
+/**
+ * @brief Menu page
+ */
 class MenuPage : public QWidget {
     Q_OBJECT
 
    public:
+    /**
+     * @brief Menu page constructor
+     * @param parent Parent widget
+     */
     MenuPage(QWidget* parent = nullptr);
     ~MenuPage();
 };

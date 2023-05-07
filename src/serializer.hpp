@@ -13,7 +13,49 @@
 #include "game/game.hpp"
 #include "maploader.hpp"
 
+/**
+ * @brief Game step info used for serialization
+ */
 class Serializer {
+   public:
+    /**
+     * @brief Serializer constructor (without map or steps)
+     */
+    Serializer();
+    ~Serializer();
+
+    /**
+     * @brief Add game step
+     * @param info Game step info
+     */
+    void addStep(GameInfo info);
+
+    /**
+     * @brief Clear all steps
+     */
+    void clearSteps();
+
+    /**
+     * @brief Get game step
+     * @param index Step index
+     */
+    GameInfo getStep(size_t index);
+
+    /**
+     * @brief Get map
+     */
+    MapInfo getMap();
+
+    /**
+     * @brief Set map
+     */
+    void setMap(MapInfo map);
+
+    /**
+     * @brief Get steps count
+     */
+    size_t getStepsCount();
+
    private:
     friend class boost::serialization::access;
     template <class Archive>
@@ -21,13 +63,6 @@ class Serializer {
         a& ticks& map;
     }
 
-   public:
     std::vector<GameInfo> ticks;
     MapInfo map;
-    Serializer();
-    Serializer(MapInfo);
-    ~Serializer();
-    void addStep(GameInfo info);
-    void clearSteps();
-    GameInfo getStep(size_t index);
 };

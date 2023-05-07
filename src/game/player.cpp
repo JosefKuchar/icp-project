@@ -8,61 +8,62 @@
 #include "player.hpp"
 
 #include <algorithm>
-#include <queue>
 #include <climits>
+#include <queue>
 
 Player::Player() {
-    this->m_movementMode = MovementMode::None;
-    this->m_direction = Direction::Up;
-    this->m_targetPosition = Point(0, 0);
+    this->movementMode = MovementMode::None;
+    this->direction = Direction::Up;
+    this->targetPosition = Point(0, 0);
 }
 
 Player::Player(Map* map, Point position) : Object(map, position) {
-    this->m_movementMode = MovementMode::None;
-    this->m_direction = Direction::Up;
-    this->m_targetPosition = Point(0, 0);
+    this->movementMode = MovementMode::None;
+    this->direction = Direction::Up;
+    this->targetPosition = Point(0, 0);
 }
 
 void Player::tick() {
-    if (this->m_movementMode == MovementMode::None) {
+    // No movement
+    if (this->movementMode == MovementMode::None) {
         return;
-    } else if (this->m_movementMode == MovementMode::Keys) {
-        if (!this->m_map->isInWall(this->position + this->m_direction)) {
-            this->position += this->m_direction;
+        // Movement by keys
+    } else if (this->movementMode == MovementMode::Keys) {
+        if (!this->map->isInWall(this->position + this->direction)) {
+            this->position += this->direction;
         }
+        // Movement by mouse
     } else {
-        if (this->position == this->m_targetPosition) {
-            this->m_movementMode = MovementMode::None;
+        if (this->position == this->targetPosition) {
+            this->movementMode = MovementMode::None;
             return;
         }
         std::vector<Point> path = this->calculateDirection();
-        
         if (path.size() < 2) {
-            this->m_movementMode = MovementMode::None;
+            this->movementMode = MovementMode::None;
             return;
         }
-
         Point point = path[1];
-
         this->position = point;
-
-        return;
     }
 }
 
 void Player::setDirection(Direction direction) {
-    this->m_direction = direction;
-    this->m_movementMode = MovementMode::Keys;
+    this->direction = direction;
+    this->movementMode = MovementMode::Keys;
 }
 
 void Player::setTargetPosition(Point position) {
-    this->m_targetPosition = position;
-    this->m_movementMode = MovementMode::Mouse;
+    this->targetPosition = position;
+    this->movementMode = MovementMode::Mouse;
 }
 
+/**
+ * @brief Calculate direction with A* algorithm
+ */
 std::vector<Point> Player::calculateDirection() {
     using namespace std;
-    auto map = this->m_map->m_map;
+    auto map = this->map->map;
 
     auto heuristic = [](int x, int y, int end_x, int end_y) {
         return abs(x - end_x) + abs(y - end_y);
@@ -81,7 +82,8 @@ std::vector<Point> Player::calculateDirection() {
     int start_y = this->position.y;
 
     g[start_x][start_y] = 0;
-    h[start_x][start_y] = heuristic(start_x, start_y, this->m_targetPosition.x, this->m_targetPosition.y);
+    h[start_x][start_y] =
+        heuristic(start_x, start_y, this->targetPosition.x, this->targetPosition.y);
     op.push(make_pair(h[start_x][start_y], Point(start_x, start_y)));
 
     while (!op.empty()) {
@@ -89,7 +91,7 @@ std::vector<Point> Player::calculateDirection() {
 
         op.pop();
 
-        if (current.x == this->m_targetPosition.x && current.y == this->m_targetPosition.y) {
+        if (current.x == this->targetPosition.x && current.y == this->targetPosition.y) {
             vector<Point> path;
 
             while (current.x != -1 && current.y != -1) {
@@ -105,19 +107,19 @@ std::vector<Point> Player::calculateDirection() {
         for (auto d : dir) {
             Point new_point = current + d;
 
-            if (!this->m_map->isInWall(new_point)) {
+            if (!this->map->isInWall(new_point)) {
                 int tentativeG = g[current.x][current.y] + 1;
 
                 if (tentativeG < g[new_point.x][new_point.y]) {
                     g[new_point.x][new_point.y] = tentativeG;
-                    h[new_point.x][new_point.y] = heuristic(new_point.x, new_point.y, this->m_targetPosition.x, this->m_targetPosition.y);
+                    h[new_point.x][new_point.y] = heuristic(
+                        new_point.x, new_point.y, this->targetPosition.x, this->targetPosition.y);
                     int totalCost = g[new_point.x][new_point.y] + h[new_point.x][new_point.y];
                     op.push(make_pair(totalCost, new_point));
                     parent[new_point.x][new_point.y] = current;
                 }
             }
         }
-
     }
 
     return vector<Point>();

@@ -6,27 +6,50 @@
  */
 
 #pragma once
+#include <vector>
 #include "map.hpp"
 #include "object.hpp"
 #include "point.hpp"
-#include <vector>
 
+/**
+ * @brief Movement mode
+ */
 enum class MovementMode {
     None,
     Keys,
     Mouse,
 };
 
+/**
+ * @brief Player
+ */
 class Player : public Object {
-    Point m_targetPosition;
-    Direction m_direction;
-    MovementMode m_movementMode;
+   private:
+    std::vector<Point> calculateDirection();
+    /// Target position
+    Point targetPosition;
+    /// Direction
+    Direction direction;
+    /// Movement mode
+    MovementMode movementMode;
 
    public:
+    /**
+     * @brief Player constructor
+     */
     Player();
+
+    /**
+     * @brief Player constructor
+     * @param map Map
+     * @param position Position
+     */
     Player(Map* map, Point position);
+
+    /**
+     * @brief Update player position
+     */
     void tick();
-    std::vector<Point> calculateDirection();
 
     /**
      * @brief Set the direction of the player

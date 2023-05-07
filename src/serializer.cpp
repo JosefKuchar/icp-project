@@ -7,6 +7,10 @@
 
 #include "serializer.hpp"
 
+Serializer::Serializer() {}
+
+Serializer::~Serializer() {}
+
 void Serializer::addStep(GameInfo info) {
     ticks.push_back(info);
 }
@@ -15,14 +19,18 @@ void Serializer::clearSteps() {
     ticks.clear();
 }
 
-Serializer::Serializer() {}
+GameInfo Serializer::getStep(size_t index) {
+    return this->ticks[index];
+}
 
-Serializer::Serializer(MapInfo map) {
+MapInfo Serializer::getMap() {
+    return this->map;
+}
+
+void Serializer::setMap(MapInfo map) {
     this->map = map;
 }
 
-Serializer::~Serializer() {}
-
-GameInfo Serializer::getStep(size_t index) {
-    return this->ticks[index];
+size_t Serializer::getStepsCount() {
+    return this->ticks.size();
 }

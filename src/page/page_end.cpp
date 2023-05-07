@@ -19,30 +19,31 @@
 #include "page.hpp"
 
 EndPage::EndPage(QWidget* parent) : QWidget(parent) {
+    // Create labels
     this->resultText = new QLabel(this);
     this->stepText = new QLabel(this);
     this->keyText = new QLabel(this);
-
     this->resultText->setAlignment(Qt::AlignCenter);
     this->stepText->setAlignment(Qt::AlignCenter);
     this->keyText->setAlignment(Qt::AlignCenter);
 
-    // Add button
+    // Back button
     QPushButton* backButton = new QPushButton("Back to Menu", this);
     backButton->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
-    // Set page on button click
     connect(backButton, &QPushButton::clicked, [this]() {
         QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
         widget->setCurrentIndex((int)Page::Menu);
     });
+    // Save button
     QPushButton* saveButton = new QPushButton("Save Replay", this);
     saveButton->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
-    // Open save dialog on button click
     connect(saveButton, &QPushButton::clicked, [this]() {
+        // Open dialog
         QFileDialog dialog(this, "Save Replay", "", "ICP Pacman (*.icpacman)");
         dialog.setAcceptMode(QFileDialog::AcceptSave);
         dialog.setDefaultSuffix(".icpacman");
         if (dialog.exec()) {
+            // Save replay
             MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
             auto filename = dialog.selectedFiles().first();
             std::ofstream outfile(filename.toStdString());
@@ -64,8 +65,11 @@ EndPage::EndPage(QWidget* parent) : QWidget(parent) {
 }
 
 void EndPage::showEvent([[maybe_unused]] QShowEvent* event) {
+    // Fetch info
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     GameInfo info = window->lastTick;
+
+    // Result text
     if (info.state == GameState::Won) {
         this->resultText->setText("You won!");
         this->resultText->setStyleSheet(
@@ -76,6 +80,7 @@ void EndPage::showEvent([[maybe_unused]] QShowEvent* event) {
             "QLabel { font-size: 30px; font-weight: bold; color: red; } ");
     }
 
+    // Other texts
     std::string stepsText = "Steps: " + std::to_string(info.step);
     std::string keysText = "Keys: " + std::to_string(info.totalKeys - info.keyPositions.size()) +
                            "/" + std::to_string(info.totalKeys);

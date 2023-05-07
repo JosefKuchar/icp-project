@@ -12,18 +12,32 @@
 #include "page_basegame.hpp"
 #include "sprite.hpp"
 
+/**
+ * @brief Play page
+ */
 class PlayPage : public BaseGamePage {
     Q_OBJECT
 
    private slots:
     void tick() override;
 
+   private:
+    void end();
+
    public:
-    void keyPressEvent(QKeyEvent* event) override;
+    /**
+     * @brief Play page constructor
+     */
     PlayPage(QWidget* parent = nullptr);
     ~PlayPage();
+
+    /**
+     * @brief Handle key press event (WSAD and arrow keys)
+     */
+    void keyPressEvent(QKeyEvent* event) override;
+
+    /**
+     * @brief Initialize play page
+     */
     void showEvent(QShowEvent* event) override;
-    void end();
-    void updatePositions();
-    void setDirection(QPoint direction);
 };

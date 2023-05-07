@@ -13,11 +13,17 @@
 #include "boost/archive/text_iarchive.hpp"
 #include "boost/archive/text_oarchive.hpp"
 
+/**
+ * @brief Invalid map exception
+ */
 class InvalidMapException : public std::exception {
    public:
     char* what() { return (char*)"Invalid map file"; }
 };
 
+/**
+ * @brief Invalid file exception
+ */
 class InvalidFileException : public std::exception {
    private:
     std::string msg;
@@ -27,8 +33,14 @@ class InvalidFileException : public std::exception {
     InvalidFileException(std::string path) { msg = path; }
 };
 
+/**
+ * @brief Map tile
+ */
 enum class Tile { Empty, Wall, Player, Ghost, Key, Target };
 
+/**
+ * @brief Map info
+ */
 class MapInfo {
    private:
     friend class boost::serialization::access;

@@ -10,36 +10,40 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
+#include <fstream>
 #include <iostream>
 #include "../mainwindow.hpp"
 #include "page.hpp"
-#include <fstream>
 
 MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
-    // Add button
+    // Play button
     QPushButton* playButton = new QPushButton("Start Game", this);
     playButton->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
-    // Set page on button click
     connect(playButton, &QPushButton::clicked, [this]() {
         // Open dialog to select map
         QFileDialog dialog(this, "Select Map", "");
         dialog.setFileMode(QFileDialog::ExistingFile);
         if (dialog.exec()) {
+            // Set map path and initialize serializer
             auto filename = dialog.selectedFiles().first();
             QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
             MainWindow* mainWindow = (MainWindow*)widget->parentWidget();
             mainWindow->serializer.clearSteps();
             mainWindow->mapPath = filename.toStdString();
+            // Go to play page
             widget->setCurrentIndex((int)Page::Play);
         }
     });
 
+    // Replay button
     QPushButton* loadButton = new QPushButton("Load Replay", this);
     loadButton->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(loadButton, &QPushButton::clicked, [this]() {
+        // Open dialog to select replay
         QFileDialog dialog(this, "Load Replay", "", "ICP Pacman (*.icpacman)");
         dialog.setFileMode(QFileDialog::ExistingFile);
         if (dialog.exec()) {
+            // Load replay
             auto filename = dialog.selectedFiles().first();
             QStackedWidget* widget = (QStackedWidget*)this->parentWidget();
             MainWindow* mainWindow = (MainWindow*)widget->parentWidget();
@@ -48,6 +52,7 @@ MenuPage::MenuPage(QWidget* parent) : QWidget(parent) {
                 boost::archive::text_iarchive archive2(infile);
                 archive2 >> mainWindow->serializer;
             }
+            // Go to replay page
             widget->setCurrentIndex((int)Page::Replay);
         }
     });

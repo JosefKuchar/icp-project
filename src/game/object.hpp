@@ -10,12 +10,25 @@
 #include "map.hpp"
 #include "point.hpp"
 
+/**
+ * @brief Object
+ */
 class Object {
    protected:
-    Map* m_map;
+    Map* map;
 
    public:
     Point position;
+
+    /**
+     * @brief Object constructor
+     */
     Object();
+
+    /**
+     * @brief Object constructor
+     * @param map Map
+     * @param position Position
+     */
     Object(Map* map, Point position);
 };

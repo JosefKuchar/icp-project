@@ -19,9 +19,10 @@ PlayPage::PlayPage(QWidget* parent) : BaseGamePage(parent) {}
 void PlayPage::showEvent([[maybe_unused]] QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     try {
+        // Load map and start game
         MapInfo map = MapInfo(window->mapPath);
         this->drawMap(map);
-        window->serializer.map = map;
+        window->serializer.setMap(map);
         window->serializer.addStep(this->game->getGameInfo());
         this->timer->start(globals::TICK_RATE);
     } catch (std::exception& e) {
@@ -66,15 +67,20 @@ void PlayPage::end() {
 }
 
 void PlayPage::tick() {
+    // Tick game
     this->game->tick();
+    // Get game info back from logic
     GameInfo info = this->game->getGameInfo();
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
+    // Add step to serializer
     window->serializer.addStep(info);
+    // Check if game is over
     if (info.state != GameState::Playing) {
         window->lastTick = info;
         this->end();
         return;
     }
+    // Draw step
     this->draw(info);
 }
 

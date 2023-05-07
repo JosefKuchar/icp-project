@@ -10,13 +10,14 @@
 Map::Map(){};
 
 Map::Map(MapInfo map) {
-    this->m_width = map.width;
-    this->m_height = map.height;
-    this->m_map = std::vector<std::vector<bool>>(map.height, std::vector<bool>(map.width, false));
+    this->width = map.width;
+    this->height = map.height;
+    this->map = std::vector<std::vector<bool>>(map.height, std::vector<bool>(map.width, false));
+    // Set walls as true
     for (int y = 0; y < map.height; y++) {
         for (int x = 0; x < map.width; x++) {
             if (map.map[y][x] == Tile::Wall) {
-                this->m_map[y][x] = true;
+                this->map[y][x] = true;
             }
         }
     }
@@ -24,12 +25,12 @@ Map::Map(MapInfo map) {
 
 bool Map::isInWall(Point position) {
     // Everything outside the map is a wall
-    if (position.x < 0 || position.x >= m_width) {
+    if (position.x < 0 || position.x >= width) {
         return true;
-    } else if (position.y < 0 || position.y >= m_height) {
+    } else if (position.y < 0 || position.y >= height) {
         return true;
     } else {
-        return this->m_map[position.y][position.x];
+        return this->map[position.y][position.x];
     }
 };
 

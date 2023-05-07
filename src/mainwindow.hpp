@@ -31,8 +31,10 @@ class MainWindow : public QMainWindow {
     std::string mapPath;
     /// Object for replays
     Serializer serializer;
+    /// Last game tick information
     GameInfo lastTick;
 
    private:
+    /// Stacked widget for swiching between screens
     QStackedWidget* stackedWidget;
 };

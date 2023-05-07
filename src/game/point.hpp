@@ -15,6 +15,9 @@
 #include "boost/archive/text_iarchive.hpp"
 #include "boost/archive/text_oarchive.hpp"
 
+/**
+ * @brief Point
+ */
 class Point {
    private:
     friend class boost::serialization::access;
@@ -25,16 +28,28 @@ class Point {
     };
 
    public:
-    int x;
-    int y;
-
+    /**
+     * @brief Point constructor (0, 0)
+     */
     Point();
+
+    /**
+     * @brief Point constructor
+     * @param x X coordinate
+     * @param y Y coordinate
+     */
     Point(int x, int y);
+
     Point operator+(Point);
     Point operator+(Direction);
     Point operator+=(Direction);
     bool operator==(const Point&) const;
     bool operator<(const Point&) const;
+
+    /// X coordinate
+    int x;
+    /// Y coordinate
+    int y;
 };
 
 template <>

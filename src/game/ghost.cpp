@@ -15,7 +15,7 @@ void Ghost::tick() {
     // Move in a random direction
     while (true) {
         Direction direction = static_cast<Direction>(rand() % 4);
-        if (!this->m_map->isInWall(this->position + direction)) {
+        if (!this->map->isInWall(this->position + direction)) {
             this->position += direction;
             break;
         }

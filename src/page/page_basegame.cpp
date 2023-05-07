@@ -16,25 +16,29 @@
 #include "page.hpp"
 
 BaseGamePage::BaseGamePage(QWidget* parent) : QWidget(parent) {
+    // Create timer
     this->timer = new QTimer(this);
     QObject::connect(this->timer, SIGNAL(timeout()), this, SLOT(tick()));
-    // Add to layout
+    // Initialzie widgets
     this->layout = new QVBoxLayout(this);
-    this->m_gameScene = new QGraphicsScene(this);
+    this->gameScene = new QGraphicsScene(this);
     this->keyText = new QLabel(this);
     this->stepText = new QLabel(this);
-    this->view = new QGraphicsView(m_gameScene);
+    this->view = new QGraphicsView(this->gameScene);
+    // Create stats layout
     QHBoxLayout* statsLayout = new QHBoxLayout(this);
     statsLayout->addWidget(keyText);
     statsLayout->addWidget(stepText);
+    // Add to main layout
     this->layout->addLayout(statsLayout);
     this->layout->addWidget(view);
+    // Set layout
     this->setLayout(this->layout);
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
 void BaseGamePage::resizeEvent([[maybe_unused]] QResizeEvent* event) {
-    this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+    this->view->fitInView(this->gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
 void BaseGamePage::drawMap(MapInfo map) {
@@ -44,73 +48,82 @@ void BaseGamePage::drawMap(MapInfo map) {
     for (int row = 0; row < map.height; ++row) {
         for (int col = 0; col < map.width; ++col) {
             QPoint position(col, row);
-            m_objects.append(new Sprite(QPixmap(":assets/grass.png"), position, -1, this->game));
+            this->objects.append(
+                new Sprite(QPixmap(":assets/grass.png"), position, -1, this->game));
             switch (map.map[row][col]) {
                 case Tile::Player:
-                    m_player = new Sprite(QPixmap(":assets/pacman.png"), position, 10, this->game);
-                    m_objects.append(m_player);
+                    this->player =
+                        new Sprite(QPixmap(":assets/pacman.png"), position, 10, this->game);
+                    this->objects.append(this->player);
                     break;
                 case Tile::Ghost: {
                     auto ghost = new Sprite(QPixmap(":assets/ghost.png"), position, 20, this->game);
-                    m_objects.append(ghost);
-                    m_ghosts.append(ghost);
+                    this->objects.append(ghost);
+                    this->ghosts.append(ghost);
                     break;
                 }
                 case Tile::Wall:
-                    m_objects.append(
+                    this->objects.append(
                         new Sprite(QPixmap(":assets/wall.png"), position, 0, this->game));
                     break;
                 case Tile::Empty:
                     break;
                 case Tile::Key: {
                     auto key = new Sprite(QPixmap(":assets/key.png"), position, 0, this->game);
-                    m_objects.append(key);
-                    m_keys.append(key);
+                    this->objects.append(key);
+                    this->keys.append(key);
                     break;
                 }
                 case Tile::Target:
-                    m_objects.append(
+                    this->objects.append(
                         new Sprite(QPixmap(":assets/target.png"), position, 0, this->game));
                     break;
             }
         }
     }
+
     // Draw walls around the map
     for (int row = -1; row <= map.height; row++) {
-        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), 0, this->game));
-        m_objects.append(
+        this->objects.append(
+            new Sprite(QPixmap(":assets/wall.png"), QPoint(-1, row), 0, this->game));
+        this->objects.append(
             new Sprite(QPixmap(":assets/wall.png"), QPoint(map.width, row), 0, this->game));
     }
     for (int col = 0; col < map.width; col++) {
-        m_objects.append(new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), 0, this->game));
-        m_objects.append(
+        this->objects.append(
+            new Sprite(QPixmap(":assets/wall.png"), QPoint(col, -1), 0, this->game));
+        this->objects.append(
             new Sprite(QPixmap(":assets/wall.png"), QPoint(col, map.height), 0, this->game));
     }
 
     // Add all objects to the scene
-    for (auto object : m_objects) {
-        m_gameScene->addItem(object);
+    for (auto object : this->objects) {
+        this->gameScene->addItem(object);
     }
 
-    this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+    // Fit scene to view
+    this->view->fitInView(this->gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 
 void BaseGamePage::clear() {
     // Stop timer
     this->timer->stop();
     // Delete all objects from game scene
-    this->m_gameScene->clear();
-    this->m_objects.clear();
-    this->m_ghosts.clear();
-    this->m_keys.clear();
+    this->gameScene->clear();
+    this->objects.clear();
+    this->ghosts.clear();
+    this->keys.clear();
 }
 
 void BaseGamePage::draw(GameInfo info) {
-    m_player->setPosition(QPoint(info.playerPosition.x, info.playerPosition.y));
-    for (int i = 0; i < m_ghosts.size(); ++i) {
-        m_ghosts[i]->setPosition(QPoint(info.ghostPositions[i].x, info.ghostPositions[i].y));
+    // Update player position
+    this->player->setPosition(QPoint(info.playerPosition.x, info.playerPosition.y));
+    // Update ghost positions
+    for (int i = 0; i < this->ghosts.size(); ++i) {
+        this->ghosts[i]->setPosition(QPoint(info.ghostPositions[i].x, info.ghostPositions[i].y));
     }
-    for (auto& key : m_keys) {
+    // Update key visibility
+    for (auto& key : this->keys) {
         bool found = false;
         for (auto& keyInfo : info.keyPositions) {
             if (key->getPosition() == QPoint(keyInfo.x, keyInfo.y)) {
@@ -120,17 +133,15 @@ void BaseGamePage::draw(GameInfo info) {
         }
         key->setVisible(found);
     }
-
+    // Update stats
     std::string step_text = "Step: " + std::to_string(info.step);
     std::string key_text = "Keys: " + std::to_string(info.totalKeys - info.keyPositions.size()) +
                            "/" + std::to_string(info.totalKeys);
-
     if (info.keyPositions.size() == 0) {
         this->keyText->setStyleSheet("QLabel { color : green; }");
     } else {
         this->keyText->setStyleSheet("QLabel { color : black; }");
     }
-
     this->stepText->setText(step_text.c_str());
     this->keyText->setText(key_text.c_str());
 }

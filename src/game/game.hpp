@@ -17,12 +17,18 @@
 #include "player.hpp"
 #include "point.hpp"
 
+/**
+ * @brief Game state
+ */
 enum class GameState {
     Playing,
     Won,
     Lost,
 };
 
+/**
+ * @brief Game info inteface for drawing
+ */
 struct GameInfo {
     Point playerPosition;
     std::vector<Point> ghostPositions;
@@ -42,16 +48,30 @@ struct GameInfo {
     };
 };
 
+/**
+ * @brief Game logic
+ */
 class Game {
-    Player m_player;
-    Point m_finish;
-    std::vector<Ghost> m_ghosts;
+    /// Player
+    Player player;
+    /// Finish coordinates
+    Point finish;
+    /// Ghost list
+    std::vector<Ghost> ghosts;
+    /// Key list (position, collected)
     std::unordered_map<Point, bool> keys;
-    Map m_map;
-    GameState m_gameState;
+    /// Map
+    Map map;
+    /// State
+    GameState gameState;
+    /// Step counter
     size_t step;
 
    public:
+    /**
+     * @brief Game constructor
+     * @param map Map
+     */
     Game(MapInfo map);
     ~Game();
 
@@ -73,22 +93,7 @@ class Game {
     void setTargetPosition(Point position);
 
     /**
-     * @brief Get the current game state
+     * @brief Get the current game state for drawing
      */
-    GameInfo getGameInfo() {
-        GameInfo info;
-        info.playerPosition = this->m_player.position;
-        for (auto& ghost : this->m_ghosts) {
-            info.ghostPositions.push_back(ghost.position);
-        }
-        for (auto& key : this->keys) {
-            if (!key.second) {
-                info.keyPositions.push_back(key.first);
-            }
-        }
-        info.state = this->m_gameState;
-        info.step = this->step;
-        info.totalKeys = this->keys.size();
-        return info;
-    }
+    GameInfo getGameInfo();
 };

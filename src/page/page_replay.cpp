@@ -16,8 +16,10 @@
 #include "page.hpp"
 
 ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
+    // Create button layout
     QHBoxLayout* buttonLayout = new QHBoxLayout(this);
 
+    // Play backwards button
     QPushButton* playBackwards = new QPushButton("Play backwards", this);
     playBackwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(playBackwards, &QPushButton::clicked, [this]() {
@@ -25,6 +27,7 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
         this->timer->start(globals::TICK_RATE);
     });
 
+    // Step backwards button
     QPushButton* stepBackwards = new QPushButton("Step backwards", this);
     stepBackwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(stepBackwards, &QPushButton::clicked, [this]() {
@@ -36,6 +39,7 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
         this->getStepAndDraw();
     });
 
+    // Stop button
     QPushButton* stop = new QPushButton("Stop", this);
     stop->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(stop, &QPushButton::clicked, [this]() {
@@ -43,18 +47,20 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
         this->timer->stop();
     });
 
+    // Step forwards button
     QPushButton* stepForwards = new QPushButton("Step forwards", this);
     stepForwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(stepForwards, &QPushButton::clicked, [this]() {
         this->replayMode = ReplayMode::Stopped;
         this->timer->stop();
         MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
-        if (this->frameIndex < window->serializer.ticks.size() - 1) {
+        if (this->frameIndex < window->serializer.getStepsCount() - 1) {
             this->frameIndex++;
         }
         this->getStepAndDraw();
     });
 
+    // Play forwards button
     QPushButton* playForwards = new QPushButton("Play forwards", this);
     playForwards->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(playForwards, &QPushButton::clicked, [this]() {
@@ -62,6 +68,7 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
         this->timer->start(globals::TICK_RATE);
     });
 
+    // Back to menu button
     QPushButton* backMenu = new QPushButton("Back to menu", this);
     backMenu->setGeometry(QRect(QPoint(100, 100), QSize(200, 50)));
     connect(backMenu, &QPushButton::clicked, [this]() {
@@ -72,6 +79,7 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
         stackedWidget->setCurrentIndex((int)Page::Menu);
     });
 
+    // Add buttons to button layout
     buttonLayout->addWidget(playBackwards);
     buttonLayout->addWidget(stepBackwards);
     buttonLayout->addWidget(stop);
@@ -79,7 +87,10 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
     buttonLayout->addWidget(playForwards);
     buttonLayout->addWidget(backMenu);
 
+    // Add button layout to main layout
     this->layout->addLayout(buttonLayout);
+
+    // Set default values
     this->frameIndex = 0;
     this->replayMode = ReplayMode::Stopped;
 }
@@ -87,7 +98,7 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
 void ReplayPage::showEvent([[maybe_unused]] QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     try {
-        MapInfo map = window->serializer.map;
+        MapInfo map = window->serializer.getMap();
         this->game = new Game(map);
         this->drawMap(map);
         this->getStepAndDraw();
@@ -105,12 +116,13 @@ void ReplayPage::showEvent([[maybe_unused]] QShowEvent* event) {
 }
 
 void ReplayPage::tick() {
+    // Update frame index
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     switch (this->replayMode) {
         case ReplayMode::Stopped:
             break;
         case ReplayMode::Forwards:
-            if (this->frameIndex < window->serializer.ticks.size() - 1) {
+            if (this->frameIndex < window->serializer.getStepsCount() - 1) {
                 this->frameIndex++;
             }
             break;
@@ -120,12 +132,15 @@ void ReplayPage::tick() {
             }
             break;
     }
+    // Draw step
     this->getStepAndDraw();
 }
 
 void ReplayPage::getStepAndDraw() {
+    // Fetch step from serializer
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     GameInfo info = window->serializer.getStep(this->frameIndex);
+    // Draw step
     this->draw(info);
 }
 
