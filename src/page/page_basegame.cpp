@@ -33,7 +33,7 @@ BaseGamePage::BaseGamePage(QWidget* parent) : QWidget(parent) {
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
-void BaseGamePage::resizeEvent(QResizeEvent* event) {
+void BaseGamePage::resizeEvent([[maybe_unused]] QResizeEvent* event) {
     this->view->fitInView(m_gameScene->itemsBoundingRect(), Qt::KeepAspectRatio);
 }
 

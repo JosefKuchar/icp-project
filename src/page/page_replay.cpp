@@ -1,8 +1,8 @@
 /**
  * @author Josef Kuchař <xkucha28@stud.fit.vutbr.cz>
  * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
- * @file page_play.cpp
- * @brief PlayPage implementation
+ * @file page_replay.cpp
+ * @brief ReplayPage implementation
  */
 
 #include "page_replay.hpp"
@@ -84,7 +84,7 @@ ReplayPage::ReplayPage(QWidget* parent) : BaseGamePage(parent) {
     this->replayMode = ReplayMode::Stopped;
 }
 
-void ReplayPage::showEvent(QShowEvent* event) {
+void ReplayPage::showEvent([[maybe_unused]] QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     try {
         MapInfo map = window->serializer.map;

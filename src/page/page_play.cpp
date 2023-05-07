@@ -16,7 +16,7 @@
 
 PlayPage::PlayPage(QWidget* parent) : BaseGamePage(parent) {}
 
-void PlayPage::showEvent(QShowEvent* event) {
+void PlayPage::showEvent([[maybe_unused]] QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     try {
         MapInfo map = MapInfo(window->mapPath);

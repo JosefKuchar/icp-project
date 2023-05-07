@@ -63,7 +63,7 @@ EndPage::EndPage(QWidget* parent) : QWidget(parent) {
     this->setLayout(layout);
 }
 
-void EndPage::showEvent(QShowEvent* event) {
+void EndPage::showEvent([[maybe_unused]] QShowEvent* event) {
     MainWindow* window = (MainWindow*)this->parentWidget()->parentWidget();
     GameInfo info = window->lastTick;
     if (info.state == GameState::Won) {

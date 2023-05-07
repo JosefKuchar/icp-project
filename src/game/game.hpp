@@ -32,7 +32,7 @@ struct GameInfo {
     size_t totalKeys;
 
     template <typename Archive>
-    void serialize(Archive& ar, const unsigned int version) {
+    void serialize(Archive& ar, [[maybe_unused]] const unsigned int version) {
         ar& playerPosition;
         ar& ghostPositions;
         ar& keyPositions;

@@ -34,7 +34,7 @@ class MapInfo {
     friend class boost::serialization::access;
 
     template <class Archive>
-    void serialize(Archive& a, const unsigned version) {
+    void serialize(Archive& a, [[maybe_unused]] const unsigned version) {
         a& map& width& height;
     };
 

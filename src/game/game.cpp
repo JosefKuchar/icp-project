@@ -61,7 +61,7 @@ void Game::tick() {
 
     this->step++;
     // Check for collision with ghost
-    for (int i = 0; i < m_ghosts.size(); i++) {
+    for (size_t i = 0; i < m_ghosts.size(); i++) {
         if (this->m_player.position == m_ghosts[i].position or
             (prev_pos == m_ghosts[i].position and this->m_player.position == prev_ghosts_pos[i])) {
             std::cout << "Lost!" << std::endl;
