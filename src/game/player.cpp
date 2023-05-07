@@ -3,6 +3,8 @@
  * @author Matej Sirovatka <xsirov00@stud.fit.vutbr.cz>
  * @file player.cpp
  * @brief Player implementation
+ *
+ * A* algorithm implementation is based on https://en.wikipedia.org/wiki/A*_search_algorithm
  */
 
 #include "player.hpp"
