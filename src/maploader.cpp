@@ -62,8 +62,8 @@ MapInfo::MapInfo(std::string path) {
         if (i == 0) {
             // Parse dimensions with regex
             if (std::regex_search(line, matches, std::regex("^(\\d+) (\\d+)$"))) {
-                this->width = std::stoi(matches[1]);
-                this->height = std::stoi(matches[2]);
+                this->height = std::stoi(matches[1]);
+                this->width = std::stoi(matches[2]);
                 continue;
                 // If regex does not match, throw exception
             } else {
