@@ -1,5 +1,10 @@
 # ICPacman - Pacman written in C++ (with QT)
 
+## Hodnocení
+80 / 100
+
+## Původní readme
+
 ## Team
 
 - `xkucha28` - Josef Kuchař
