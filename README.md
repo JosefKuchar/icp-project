@@ -3,7 +3,7 @@
 ## Hodnocení
 80 / 100
 
-## Původní readme
+## Původní README
 
 ## Team
 
